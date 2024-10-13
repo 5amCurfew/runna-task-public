@@ -21,8 +21,63 @@ python3 main.py 2024-10-01
 python3 main.py 2024-10-02
 ```
 
-### Data Model
+### Extract & Load
 
+TODO:
+
+* document concurrency handling for improved scalability
+* document error handling
+* discuss extensions 
+
+### Data Model (Transformation)
+
+<ERD PLACEHOLDER>
+
+TODO:
+
+* all extraction is extractd to the data sinks `raw__<TABLE_TYPE>__<ATOMIC_VALUE>`. This means we can re-run batches without losing the original data at the time of the original extraction.
+* document table partitioning where applicable
+* document table clustering where applicable
+* document data validation using `@dataclass`
+* discuss extensions
+
+#### `fct__activities`
+
+```terraform
+    time_partitioning {
+        type = "DAY"
+        field = "createdAt"
+    }
+
+    clustering = [
+        "userID"
+    ]
+```
+
+#### `dim__plans`
+
+#### `dim__workouts`
+
+#### `bdg__activity_to_laps`
+
+```terraform
+    time_partitioning {
+        type = "DAY"
+        field = "startTimestamp"
+    }
+
+    clustering = [
+        "activityID"
+    ]
+```
+
+#### `bdg__workout_to_steps`
+
+```terraform
+    clustering = [
+        "workoutID"
+    ]
+```
 
 ### Example Queries
 
