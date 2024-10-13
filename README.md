@@ -68,14 +68,18 @@ fct__activities
 -> dim__workouts
 -> dim__plans
 -> bdg__activity_to_laps
+
 dim__plans
 <- fct__activities
+
 dim__workouts
 <- fct__activities
 -> bdg__workout_to_steps
+
 bdg__activity_to_laps
 <- fct__activities
 -> bdg__workout_to_steps
+
 bdg__workout_to_steps
 <- dim__workouts
 <- bdg__activity_to_lap 
