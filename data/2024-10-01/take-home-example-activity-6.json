@@ -1,13 +1,13 @@
 {
     "userId": "user-5",
     "activityId": "activity6",
-    "workoutId": "200m-Repeats-6",
+    "workoutId": "200m-Repeats",
     "recordType": "GARMIN",
     "laps": [
         {
             "averageCadence": 177,
             "averageHeartRate": 143.5,
-            "averageSpeed": 2.772,
+            "averageSpeed": 1.772,
             "distance": 2000,
             "elevationGain": 9,
             "maxCadence": 190,

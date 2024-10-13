@@ -49,6 +49,7 @@ class Activity(BaseDataClass):
             "workoutId": self.workoutId,
             "recordType": self.recordType,
             "weekOfPlan": self.weekOfPlan,
+            "currentEst5kTimeInSecs": self.plannedWorkoutMetadata.get("currentEst5kTimeInSecs", None),
         }
 
     # ########################

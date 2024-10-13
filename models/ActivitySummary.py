@@ -14,6 +14,7 @@ class ActivitySummary(BaseDataClass):
     workoutId: str
     recordType: Optional[str] = None
     weekOfPlan: Optional[int] = None
+    currentEst5kTimeInSecs: Optional[int] = None
 
     def __post_init__(self):
         """

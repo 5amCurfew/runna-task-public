@@ -33,17 +33,5 @@
         "type": "FLOAT64",
         "mode": "NULLABLE",
         "description": "Distance of workout (optional)"
-    },
-    {
-        "name": "currentEst5kTimeInSecs",
-        "type": "FLOAT64",
-        "mode": "NULLABLE",
-        "description": "Estimated user 5K time (optional)"
-    },
-    {
-        "name": "plannedWorkoutDate",
-        "type": "DATE",
-        "mode": "NULLABLE",
-        "description": "Planned workout date (optional)"
     }
 ]

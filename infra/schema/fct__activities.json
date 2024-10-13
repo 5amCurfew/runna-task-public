@@ -63,5 +63,11 @@
         "type": "INT64",
         "mode": "NULLABLE",
         "description": "Week of the plan when the activity occurred (optional)"
+    },
+    {
+        "name": "currentEst5kTimeInSecs",
+        "type": "INT64",
+        "mode": "NULLABLE",
+        "description": "Estimated 5K Time at time of activity"
     }
 ]

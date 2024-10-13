@@ -13,8 +13,6 @@ class Workout(BaseDataClass):
             "workoutType": self.metadata.get("workoutType", None),
             "runType": self.metadata.get("runType", None),
             "distance": self.metadata.get("distance", None),
-            "currentEst5kTimeInSecs": self.metadata.get("currentEst5kTimeInSecs", None),
-            "plannedWorkoutDate": self.metadata.get("plannedWorkoutDate", None),
         }
 
     def transform__flatten_steps(self):

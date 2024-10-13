@@ -9,8 +9,6 @@ class WorkoutSummary(BaseDataClass):
     workoutType: Optional[str] = None
     runType: Optional[str] = None
     distance: Optional[float] = None
-    currentEst5kTimeInSecs: Optional[float] = None
-    plannedWorkoutDate: Optional[str] = None
 
     def __post_init__(self):
         # Set ETL metadata
