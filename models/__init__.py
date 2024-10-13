@@ -1,7 +1,7 @@
-__all__ = ["Activity", "Lap", "Plan", "Workout", "WorkoutStep"]
+__all__ = ["Activity", "ActivityLap", "Plan", "Workout", "WorkoutStep"]
 
 from .Activity import Activity
-from .Lap import Lap
+from .ActivityLap import ActivityLap
 from .Plan import Plan
 from .Workout import Workout
 from .WorkoutStep import WorkoutStep

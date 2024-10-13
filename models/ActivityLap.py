@@ -4,7 +4,7 @@ from typing import Optional
 from .BaseDataClass import BaseDataClass
 
 @dataclass
-class Lap(BaseDataClass):
+class ActivityLap(BaseDataClass):
     index: int
     averageCadence: Optional[float] = None
     averageHeartRate: Optional[float] = None

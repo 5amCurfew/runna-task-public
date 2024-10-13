@@ -4,7 +4,7 @@ from .Workout import Workout
 from .WorkoutSummary import WorkoutSummary
 from .WorkoutStep import WorkoutStep
 from .Plan import Plan
-from .Lap import Lap
+from .ActivityLap import ActivityLap
 from dataclasses import dataclass
 from typing import Optional
 from .BaseDataClass import BaseDataClass
@@ -93,7 +93,7 @@ class Activity(BaseDataClass):
                 "surrogateKey": f"{self.activityId}::{index}",
                 "activityID": self.activityId,
                 "workoutStepSurrogateKey": f"{self.workoutId}::{index}",
-                **Lap(index=index, **lap).to_dict()
+                **ActivityLap(index=index, **lap).to_dict()
             }
             for index, lap in enumerate(self.laps)
         ]
