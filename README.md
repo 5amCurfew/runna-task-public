@@ -1,17 +1,41 @@
+## Runna Task Home Task, October 2024
+
+*We currently have ~30,000 activities landing in s3 per day. The representations of these activities are JSON files with data pertaining to activity performance, plan adherence (e.g. which week of their plan they are on) and user data (e.g. their current estimated 5k time).*
+
+*The objective of this task is to create a robust data pipeline that processes workout data from a JSON structure, stores it in an optimal format, and makes it available for querying and analysis.*
+
+### Introduction
+
+Cloud infrastructure for this task is provided in the `infra` directory. This includes creation of data sinks (BigQuery tables) and the presentation views presented for analytics. For more information, see the `README.md` in the `infra` directory. Terraform is used to manage the infrastructure. *Note that GCP & BigQuery was chosen for ease due to my existing personal accounts. The principles can also be applied to AWS & Redshift.*
+
+The `etl` directory contains the *extract* and *load* functions used for the pipeline. It is assumed throughout that **daily batches** meets requirements for this data. `extract` reads from JSON file, and `load` writes to BigQuery.
+
+The data provided, in addition to replicated JSON files, can be found in the `data` directory, where each subdirectory reflects a **batch date** (this is to mirror a cloud storage system, such as S3, for demonstration purposes).
+
+**Data transformation** is handled by the `Activity` class within the `models` directory. This class is responsible for parsing and storing the data in the appropriate format. This includes transforming *Workout Steps* (bridge table), *Activity Laps* (bridge table) and the fact/dimensional models.
+
+Mock-batches are processed in the `main.py` file.
+
 ```bash
 python3 main.py 2024-10-01
 python3 main.py 2024-10-02
 ```
 
+### Data Model
+
+
+### Example Queries
+
 *How much did a user beat/miss their pace targets by on average?*
+
 ```SQL
 select
   fct.userID,
   fct.activityID,
   bdg_to_laps.index as lapIndex,
   bdg_to_laps.averageSpeed,
-  JSON_EXTRACT(bdg_to_steps.paces, "$.slow.mps"),
-  JSON_EXTRACT(bdg_to_steps.paces, "$.fast.mps"),
+  JSON_EXTRACT(bdg_to_steps.paces, "$.slow.mps") as slowPace,
+  JSON_EXTRACT(bdg_to_steps.paces, "$.fast.mps") as fastPace,
 from
   `activities.fct__activities` as fct
   inner join `activities.bdg__activity_to_laps` as bdg_to_laps
@@ -23,6 +47,7 @@ order by
 ```
 
 *How does this workout distance compare to their workouts in the previous week of their plan?*
+
 ```SQL
 select
   fct.userID,
@@ -47,6 +72,7 @@ ORDER BY
 ```
 
 *How did this user perform compared with other users in this same workout?*
+
 ```SQL
 select 
   workouts.workoutID,
@@ -69,6 +95,7 @@ order by
 ```
 
 *In the last 6 months, how many TEMPO sessions have been completed?*
+
 ```SQL
 with activity_steps_completed as (
   select 
@@ -113,6 +140,43 @@ from
   inner join activity_steps
     on activity_steps.activityID = activity_steps_completed.activityID
 ```
+
+
+### File Structure
+```bash
+runna-task-public/
+┣ data/
+┃ ┣ 2024-10-01/
+┃ ┗ 2024-10-02/
+┣ etl/
+┃ ┣ __init__.py
+┃ ┣ extract.py
+┃ ┗ load.py
+┣ infra/
+┃ ┣ schema/
+┃ ┣ README.md
+┃ ┣ backend.hcl
+┃ ┣ bigquery__presentation.tf
+┃ ┣ bigquery__raw.tf
+┃ ┗ main.tf
+┣ models/
+┃ ┣ Activity.py
+┃ ┣ ActivityLap.py
+┃ ┣ ActivitySummary.py
+┃ ┣ BaseDataClass.py
+┃ ┣ Plan.py
+┃ ┣ Workout.py
+┃ ┣ WorkoutStep.py
+┃ ┣ WorkoutSummary.py
+┃ ┗ __init__.py
+┣ .gitignore
+┣ .python-version
+┣ Makefile
+┣ README.md
+┣ main.py
+┗ requirements.txt
+```
+
 
 #### Notes
 
