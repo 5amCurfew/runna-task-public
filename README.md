@@ -40,44 +40,36 @@ order by
 --TODO In the last 6 months, how many TEMPO sessions have been completed?
 
 
-# ###########################################
-#
-# A PLAN is a collection of scheduled WORKOUTs
-#   - ID: unique identifier of the plan
-#   - planLength: the total duration of the plan
-#
-# An ACTIVITY is a record of performance during a WORKOUT
-#   - ID: unique identifier of the activity
-#   - userID: identifier of the user
-#   - workoutID: unique identifier of the workout
-#   - weekOfPlan: the week of the plan at the time of the activity
-#   - ...
-#
-# A WORKOUT is a collection of STEPS
-#   - ID: unique identifier of the workout
-#   - workoutType: classifier of the workout
-#   - runType: classifier of the run
-#   - plannedWorkoutDate: scheduled date of the workout
-#   - ...
-#
-# A STEP is an component of a workout (completion reflected in an activity LAP)
-#   - type: classifier of the step
-#   - duration: duration of the step
-#   - ...
-#
-# fct__activities
-#   -> dim__workouts
-#   -> dim__plans
-#   -> bdg__activity_to_laps
-# dim__plans
-#   <- fct__activities
-# dim__workouts
-#   <- fct__activities
-#   -> bdg__workout_to_steps
-# bdg__activity_to_laps
-#   <- fct__activities
-#   -> bdg__workout_to_steps
-# bdg__workout_to_steps
-#   <- dim__workouts
-#   <- bdg__activity_to_laps
-# ###########################################
+
+A PLAN is a collection of scheduled WORKOUTs
+- ID: unique identifier of the plan
+- planLength: the total duration of the plan
+An ACTIVITY is a record of performance during a WORKOUT
+- ID: unique identifier of the activity
+- userID: identifier of the user
+- workoutID: unique identifier of the workout
+- weekOfPlan: the week of the plan at the time of the activity
+- ...
+A WORKOUT is a collection of STEPS
+- ID: unique identifier of the workout
+- workoutType: classifier of the workout
+- runType: classifier of the run
+- plannedWorkoutDate: scheduled date of the workout
+- ...
+A STEP is an component of a workout (completion reflected in an activity LAP)
+- type: classifier of the step
+- duration: duration of the step
+- ...
+
+
+fct__activities
+-> dim__workouts
+-> dim__plans
+-> bdg__activity_to_lapsdim__plans
+<- fct__activitiesdim__workouts
+<- fct__activities
+-> bdg__workout_to_stepsbdg__activity_to_laps
+<- fct__activities
+-> bdg__workout_to_stepsbdg__workout_to_steps
+<- dim__workouts
+<- bdg__activity_to_lap 
