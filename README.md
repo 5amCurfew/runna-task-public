@@ -65,21 +65,26 @@ A STEP is an component of a workout (completion reflected in an activity LAP)
 - ...
 
 fct__activities
--> dim__workouts
--> dim__plans
--> bdg__activity_to_laps
+
+* -> dim__workouts
+* -> dim__plans
+* -> bdg__activity_to_laps
 
 dim__plans
-<- fct__activities
+
+* <- fct__activities
 
 dim__workouts
-<- fct__activities
--> bdg__workout_to_steps
+
+* <- fct__activities
+* -> bdg__workout_to_steps
 
 bdg__activity_to_laps
-<- fct__activities
--> bdg__workout_to_steps
+
+* <- fct__activities
+* -> bdg__workout_to_steps
 
 bdg__workout_to_steps
-<- dim__workouts
-<- bdg__activity_to_lap 
+
+* <- dim__workouts
+* <- bdg__activity_to_lap 
