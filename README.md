@@ -22,19 +22,29 @@ order by
   userID, activityID, lapIndex
 ```
 
---TODO How does this workout distance compare to their workouts in the previous week of their plan?
+*How does this workout distance compare to their workouts in the previous week of their plan?*
+```SQL
 select
   fct.userID,
   fct.planID,
+  fct.activityID,
   fct.weekOfPlan,
-  workouts.distance
-from
-  `activities.fct__activities` as fct
-  left join `activities.dim__workouts` workouts
-    on workouts.workoutID = fct.workoutID
-order by
-  userID, planID, weekOfPlan;
-
+  workouts.distance,
+  AVG(prev_workouts.distance) OVER (PARTITION BY fct.userID, fct.planID ORDER BY fct.weekOfPlan) AS avg_distance_prior_week
+FROM
+  `activities.fct__activities` AS fct
+  LEFT JOIN `activities.dim__workouts` workouts
+    ON workouts.workoutID = fct.workoutID
+  -- Join the previous week's activities to get the average distance
+  LEFT JOIN `activities.fct__activities` AS prev_fct
+    ON fct.userID = prev_fct.userID
+    AND fct.planID = prev_fct.planID
+    AND fct.weekOfPlan = prev_fct.weekOfPlan + 1
+  LEFT JOIN `activities.dim__workouts` prev_workouts
+    ON prev_workouts.workoutID = prev_fct.workoutID
+ORDER BY
+  fct.userID, fct.planID, fct.weekOfPlan;
+```
 
 --TODO How did this user perform compared with other users in this same workout?
 --TODO In the last 6 months, how many TEMPO sessions have been completed?
