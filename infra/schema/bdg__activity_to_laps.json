@@ -1,0 +1,121 @@
+[
+    {
+        "name": "extractedAt",
+        "type": "TIMESTAMP",
+        "mode": "REQUIRED"
+    },
+    {
+        "name": "surrogateKey",
+        "type": "STRING",
+        "mode": "REQUIRED",
+        "description": "Surrogate key for activity lap (defined by activity ID and lap index)"
+    },
+    {
+        "name": "activityID",
+        "type": "STRING",
+        "mode": "REQUIRED",
+        "description": "Identifier of the activity associated with the lap"
+    },
+    {
+        "name": "workoutStepSurrogateKey",
+        "type": "STRING",
+        "mode": "NULLABLE",
+        "description": "SK of corresponding workout step"
+    },
+    {
+        "name": "index",
+        "type": "INTEGER",
+        "mode": "REQUIRED",
+        "description": "Index of the lap"
+    },
+    {
+        "name": "averageCadence",
+        "type": "FLOAT",
+        "mode": "NULLABLE",
+        "description": "Average cadence during the lap"
+    },
+    {
+        "name": "averageHeartRate",
+        "type": "FLOAT",
+        "mode": "NULLABLE",
+        "description": "Average heart rate during the lap"
+    },
+    {
+        "name": "averageSpeed",
+        "type": "FLOAT",
+        "mode": "NULLABLE",
+        "description": "Average speed during the lap"
+    },
+    {
+        "name": "distance",
+        "type": "FLOAT",
+        "mode": "NULLABLE",
+        "description": "Distance covered in the lap"
+    },
+    {
+        "name": "elevationGain",
+        "type": "FLOAT",
+        "mode": "NULLABLE",
+        "description": "Elevation gain during the lap"
+    },
+    {
+        "name": "maxCadence",
+        "type": "FLOAT",
+        "mode": "NULLABLE",
+        "description": "Maximum cadence recorded during the lap"
+    },
+    {
+        "name": "maxElevation",
+        "type": "FLOAT",
+        "mode": "NULLABLE",
+        "description": "Maximum elevation recorded during the lap"
+    },
+    {
+        "name": "maxHeartRate",
+        "type": "INTEGER",
+        "mode": "NULLABLE",
+        "description": "Maximum heart rate recorded during the lap"
+    },
+    {
+        "name": "maxSpeed",
+        "type": "FLOAT",
+        "mode": "NULLABLE",
+        "description": "Maximum speed recorded during the lap"
+    },
+    {
+        "name": "minElevation",
+        "type": "FLOAT",
+        "mode": "NULLABLE",
+        "description": "Minimum elevation recorded during the lap"
+    },
+    {
+        "name": "minHeartRate",
+        "type": "FLOAT",
+        "mode": "NULLABLE",
+        "description": "Minimum heart rate recorded during the lap"
+    },
+    {
+        "name": "movingTime",
+        "type": "FLOAT",
+        "mode": "NULLABLE",
+        "description": "Moving time during the lap, in seconds"
+    },
+    {
+        "name": "startTimestamp",
+        "type": "TIMESTAMP",
+        "mode": "NULLABLE",
+        "description": "Start timestamp of the lap"
+    },
+    {
+        "name": "totalTime",
+        "type": "FLOAT",
+        "mode": "NULLABLE",
+        "description": "Total time of the lap"
+    },
+    {
+        "name": "wktStepIndex",
+        "type": "INTEGER",
+        "mode": "NULLABLE",
+        "description": "Index of the workout step associated with the lap"
+    }
+]

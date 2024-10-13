@@ -1,0 +1,67 @@
+[
+    {
+        "name": "extractedAt",
+        "type": "TIMESTAMP",
+        "mode": "REQUIRED"
+    },
+    {
+        "name": "surrogateKey",
+        "type": "STRING",
+        "mode": "REQUIRED",
+        "description": "Surrogate key for the activity (defined by activity ID)"
+    },
+    {
+        "name": "sourcePath",
+        "type": "STRING",
+        "mode": "REQUIRED",
+        "description": "JSON Blob address"
+    },
+    {
+        "name": "activityID",
+        "type": "STRING",
+        "mode": "REQUIRED",
+        "description": "Unique identifier for the activity summary"
+    },
+    {
+        "name": "createdOn",
+        "type": "INT64",
+        "mode": "REQUIRED",
+        "description": "Timestamp when the activity was created"
+    },
+    {
+        "name": "createdAt",
+        "type": "TIMESTAMP",
+        "mode": "REQUIRED",
+        "description": "Timestamp when the activity was created"
+    },
+    {
+        "name": "planID",
+        "type": "STRING",
+        "mode": "REQUIRED",
+        "description": "ID of the associated workout plan"
+    },
+    {
+        "name": "userID",
+        "type": "STRING",
+        "mode": "REQUIRED",
+        "description": "ID of the user who performed the activity"
+    },
+    {
+        "name": "workoutID",
+        "type": "STRING",
+        "mode": "REQUIRED",
+        "description": "ID of the workout session"
+    },
+    {
+        "name": "recordType",
+        "type": "STRING",
+        "mode": "NULLABLE",
+        "description": "Type of record (optional)"
+    },
+    {
+        "name": "weekOfPlan",
+        "type": "INT64",
+        "mode": "NULLABLE",
+        "description": "Week of the plan when the activity occurred (optional)"
+    }
+]

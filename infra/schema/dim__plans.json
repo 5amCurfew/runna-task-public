@@ -1,0 +1,25 @@
+[
+    {
+        "name": "extractedAt",
+        "type": "TIMESTAMP",
+        "mode": "REQUIRED"
+    },
+    {
+        "name": "surrogateKey",
+        "type": "STRING",
+        "mode": "REQUIRED",
+        "description": "Surrogate key for the plan (defined by ID)"
+    },
+    {
+        "name": "planID",
+        "type": "STRING",
+        "mode": "REQUIRED",
+        "description": "unique identifier for the plan"
+    },
+    {
+        "name": "planLength",
+        "type": "INT64",
+        "mode": "NULLABLE",
+        "description": "Total length (in weeks) of plan (optional)"
+    }
+]

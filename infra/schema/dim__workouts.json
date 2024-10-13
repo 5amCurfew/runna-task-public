@@ -1,0 +1,49 @@
+[
+    {
+        "name": "extractedAt",
+        "type": "TIMESTAMP",
+        "mode": "REQUIRED"
+    },
+    {
+        "name": "surrogateKey",
+        "type": "STRING",
+        "mode": "REQUIRED",
+        "description": "Surrogate key for the workout (defined by workout ID)"
+    },
+    {
+        "name": "workoutID",
+        "type": "STRING",
+        "mode": "REQUIRED",
+        "description": "unique identifier for the workout"
+    },
+    {
+        "name": "workoutType",
+        "type": "STRING",
+        "mode": "NULLABLE",
+        "description": "Type of workout (optional)"
+    },
+    {
+        "name": "runType",
+        "type": "STRING",
+        "mode": "NULLABLE",
+        "description": "Type of run-workout (optional)"
+    },
+    {
+        "name": "distance",
+        "type": "FLOAT64",
+        "mode": "NULLABLE",
+        "description": "Distance of workout (optional)"
+    },
+    {
+        "name": "currentEst5kTimeInSecs",
+        "type": "FLOAT64",
+        "mode": "NULLABLE",
+        "description": "Estimated user 5K time (optional)"
+    },
+    {
+        "name": "plannedWorkoutDate",
+        "type": "DATE",
+        "mode": "NULLABLE",
+        "description": "Planned workout date (optional)"
+    }
+]
