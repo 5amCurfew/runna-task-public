@@ -212,6 +212,7 @@ from
 * On failure of a record being loaded, dump the JSON record to an error audit log
 * Alerting mechanism
 * Orchestration - e.g. these can be adapted to be Airflow operators.
+* With more time I would like to provide further aggregated fields on the `fact` table (e.g. `isCompleted`).
 
 ```bash
 data/2024-10-01/take-home-example-activity-1-with-error.json extraction at 2024-10-14 18:05:48.513134...
