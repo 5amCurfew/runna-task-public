@@ -1,3 +1,16 @@
+- [Runna Task Home Task, October 2024](#runna-task-home-task-october-2024)
+   * [Introduction](#introduction)
+   * [Data Model (Transformation)](#data-model-transformation)
+      + [`fct__activities`](#fct__activities)
+      + [`dim__plans`](#dim__plans)
+      + [`dim__workouts`](#dim__workouts)
+      + [`bdg__activity_to_laps`](#bdg__activity_to_laps)
+      + [`bdg__workout_to_steps`](#bdg__workout_to_steps)
+   * [Example Queries](#example-queries)
+   * [Extensions](#extensions)
+   * [File Structure](#file-structure)
+   * [Notes](#notes)
+
 ## Runna Task Home Task, October 2024
 
 *We currently have ~30,000 activities landing in s3 per day. The representations of these activities are JSON files with data pertaining to activity performance, plan adherence (e.g. which week of their plan they are on) and user data (e.g. their current estimated 5k time).*
@@ -250,7 +263,7 @@ runna-task-public/
 ```
 
 
-#### Notes
+### Notes
 
 A PLAN is a collection of scheduled WORKOUTs
 - ID: unique identifier of the plan
