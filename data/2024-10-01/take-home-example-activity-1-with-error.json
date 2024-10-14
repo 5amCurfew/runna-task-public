@@ -22816,10 +22816,6 @@
         }
     ],
     "createdOn": 1707150113000,
-    "planDetails": {
-        "id": "HILLY_HALF",
-        "planLength": 10
-    },
     "weekOfPlan": 6,
     "unitOfMeasure": "KILOMETERS",
     "plannedWorkoutMetadata": {
