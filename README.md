@@ -10,11 +10,11 @@ Cloud infrastructure for this task is provided in the `infra` directory. This in
 
 **Extract** and **Load** functions can be found in the `etl` directory. It is assumed throughout that *daily batches* meets requirements for Runna. `extract` reads from JSON files, and `load` writes to BigQuery. These are executed in the `main.py`.
 
-**Data transformation** is handled by the `Activity` class within the `models` directory. This class is responsible for parsing and storing the data in the appropriate format to then **load** to the data warehouse. This includes transforming *Workout Steps* (bridge table), *Activity Laps* (bridge table) and the fact/dimensional models.
+**Data transformation** is handled by the `Activity` class within the `models` directory. This class is responsible for parsing and storing the data in the appropriate format to then *load* to the data warehouse. This includes transforming *Workout Steps* (bridge table), *Activity Laps* (bridge table) and the fact/dimensional models.
 
 The data provided, in addition to replicated JSON files, can be found in the `data` directory, where each subdirectory reflects a **batch date** (this is to mirror a cloud storage system bucket, such as S3, for demonstration purposes).
 
-Mock-batches are processed using the `main.py` file, where all data for the batch is ingested into the warehouse sinks `runna-task-public.activities.raw__<TABLE_TYPE>__<ATOMIC_VALUE>` as a new row with an `extractedAt` field. Activities are processed concurrently for performance (**note a limit of 2 threads in this example**). 
+Mock-batches are processed using the `main.py` file, where all data for the batch is ingested into the warehouse sinks `runna-task-public.activities.raw__<TABLE_TYPE>__<ATOMIC_VALUE>` as a new row with an `extractedAt` field. Activities are processed concurrently for performance (*note a limit of 2 threads in this example*). 
 
 ```bash
 python3 main.py 2024-10-01
@@ -29,13 +29,13 @@ data/2024-10-01/take-home-example-activity-1.json loaded successfully at 2024-10
 data/2024-10-01/take-home-example-activity-5.json loaded successfully at 2024-10-14 18:05:53.693522
 ```
 
-For the purposes of this task, failures, warnings and errors are logged to the terminal, and ingestion is subsequently skipped. This is done for demonstration purposes, but in a production environment, these would be logged in an audit table within the warehouse, and a separate alerting system would be used to notify the team of any issues (for example, a Slack channel). With more time I would have prefered to decouple the `Activity` class from the other data models.
+For the purposes of this task, failures, warnings and errors are logged to the terminal, and ingestion is subsequently skipped. This is done for demonstration purposes, but in a production environment, these would be logged in an audit table within the warehouse, and a separate alerting system would be used to notify the team of any issues (for example, a Slack channel).
 
 ### Data Model (Transformation)
 
 ![ERD](/assets/ERD.png)
 
-**Note that presentation models are views on top of `raw__<TABLE_TYPE>__<ATOMIC_VALUE>` where the raw table creates a new row for each etl run. Please refer to `infra/bigquery__presentation.tf` for the definition of the presentation models.**
+*Note that presentation models are views on top of `raw__<TABLE_TYPE>__<ATOMIC_VALUE>` where the raw table creates a new row for each etl run. Please refer to `infra/bigquery__presentation.tf` for the definition of the presentation models.*
 
 A `@dataclass` for each of the models is created in the `models` directory to validate the expected schema.
 
@@ -207,11 +207,12 @@ from
 ### Extensions
 
 * Unit tests for class transformation methods
-* Explicit typing tests for models - however I do not **own the data generating process** and I don't want the pipeline to break if the data changes
+* Explicit typing tests for models - however I do not *own the data generating process* and I don't want the pipeline to break if the data changes
 * Currently, the `Activity` class is very strict on the schema, with more time I would like to decouple the `Activity` class from other data models (e.g. load an activity that wasn't part of a plan?)
 * On failure of a record being loaded, dump the JSON record to an error audit log
 * Alerting mechanism
 * Orchestration - e.g. these can be adapted to be Airflow operators.
+* Decouple the classes from models - currently very strict with `Activity` class (e.g. issues with `plannedWorkoutMetadata` but still load `laps`)
 * With more time I would like to provide further aggregated fields on the `fact` table (e.g. `isCompleted`).
 
 ```bash
