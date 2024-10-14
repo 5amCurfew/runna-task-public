@@ -208,23 +208,11 @@ from
 
 * Unit tests for class transformation methods
 * Explicit typing tests for models - however I do not *own the data generating process* and I don't want the pipeline to break if the data changes
-* Currently, the `Activity` class is very strict on the schema, with more time I would like to decouple the `Activity` class from other data models (e.g. load an activity that wasn't part of a plan?)
+* Currently, the `Activity` class is very strict on the schema, with more time I would like to decouple the `Activity` class from other data models (e.g. load an activity that wasn't part of a plan? issues with `plannedWorkoutMetadata` but still load `laps`?)
 * On failure of a record being loaded, dump the JSON record to an error audit log
 * Alerting mechanism
 * Orchestration - e.g. these can be adapted to be Airflow operators.
-* Decouple the classes from models - currently very strict with `Activity` class (e.g. issues with `plannedWorkoutMetadata` but still load `laps`)
 * With more time I would like to provide further aggregated fields on the `fact` table (e.g. `isCompleted`).
-
-```bash
-data/2024-10-01/take-home-example-activity-1-with-error.json extraction at 2024-10-14 18:05:48.513134...
-data/2024-10-01/take-home-example-activity-6.json extraction at 2024-10-14 18:05:48.513401...
-Warning: data/2024-10-01/take-home-example-activity-1-with-error.json: __init__() missing 2 required positional arguments: 'activityId' and 'planDetails'. skipping...
-data/2024-10-01/take-home-example-activity-1.json extraction at 2024-10-14 18:05:48.527748...
-data/2024-10-01/take-home-example-activity-6.json loaded successfully at 2024-10-14 18:05:51.797218
-data/2024-10-01/take-home-example-activity-5.json extraction at 2024-10-14 18:05:51.798645...
-data/2024-10-01/take-home-example-activity-1.json loaded successfully at 2024-10-14 18:05:51.804437
-data/2024-10-01/take-home-example-activity-5.json loaded successfully at 2024-10-14 18:05:53.693522
-```
 
 ### File Structure
 ```bash
