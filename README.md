@@ -197,7 +197,7 @@ select
   activity_steps_completed.runType,
   activity_steps_completed.total as steps_completed,
   activity_steps.total as steps,
-  case when activity_steps_completed.total = activity_steps.total then true else false end as isCompleted
+  case when activity_steps_completed.total >= activity_steps.total then true else false end as isCompleted
 from 
   activity_steps_completed
   inner join activity_steps
