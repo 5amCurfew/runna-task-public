@@ -1,4 +1,5 @@
 import datetime
+from .WorkoutSummary import WorkoutSummary
 from dataclasses import dataclass
 from .BaseDataClass import BaseDataClass
 
@@ -8,12 +9,12 @@ class Workout(BaseDataClass):
     metadata: dict
 
     def transform__summary(self) -> dict:
-        self.summary = {
+        self.summary = WorkoutSummary(**{
             "workoutId": self.workoutId,
             "workoutType": self.metadata.get("workoutType", None),
             "runType": self.metadata.get("runType", None),
             "distance": self.metadata.get("distance", None),
-        }
+        })
 
     def transform__flatten_steps(self):
         flattened_steps = []

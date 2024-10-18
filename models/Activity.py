@@ -1,7 +1,6 @@
 import datetime
 from .ActivitySummary import ActivitySummary
 from .Workout import Workout
-from .WorkoutSummary import WorkoutSummary
 from .WorkoutStep import WorkoutStep
 from .Plan import Plan
 from .ActivityLap import ActivityLap
@@ -39,7 +38,7 @@ class Activity(BaseDataClass):
             self.createdOn = min(self.laps, key=lambda x: x["startTimestamp"]).get("startTimestamp")
 
     def transform__summary(self) -> dict:
-        self.summary = {
+        self.summary = ActivitySummary(**{
             "activityId": self.activityId,
             "createdOn": self.createdOn,
             "planId": self.planDetails["id"],
@@ -50,7 +49,7 @@ class Activity(BaseDataClass):
             "recordType": self.recordType,
             "weekOfPlan": self.weekOfPlan,
             "currentEst5kTimeInSecs": self.plannedWorkoutMetadata.get("currentEst5kTimeInSecs", None),
-        }
+        })
 
     # ########################
     # Transform: fct__activities
@@ -60,7 +59,7 @@ class Activity(BaseDataClass):
         Transforms activity data into a summary format suitable for data warehouse insertion
         """
         self.transform__summary()
-        return ActivitySummary(**self.summary).to_dict()
+        return self.summary.to_dict()
 
     # ########################
     # Transform: dim__plans
@@ -80,7 +79,7 @@ class Activity(BaseDataClass):
         """
         workout = Workout(workoutId = self.workoutId, metadata = self.plannedWorkoutMetadata)
         workout.transform__summary()
-        return WorkoutSummary(**workout.summary).to_dict()
+        return workout.summary.to_dict()
 
     # ########################
     # Transform: bdg__activity_to_laps
