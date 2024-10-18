@@ -39,6 +39,7 @@ class TransformFn(beam.DoFn):
         try:
             act = Activity(**activity)
         except Exception as e:
+            print(f"{activity['sourcePath']}: {e} skipping...")
             yield beam.pvalue.TaggedOutput(FAILURE_TAG, (activity['sourcePath'], str(e)))
             return
 
