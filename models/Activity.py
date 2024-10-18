@@ -59,16 +59,7 @@ class Activity(BaseDataClass):
         Transforms activity data into a summary format suitable for data warehouse insertion
         """
         self.transform__summary()
-        return self.summary.to_dict()
-
-    # ########################
-    # Transform: dim__plans
-    # ########################
-    def transform__dim__plans(self):
-        """
-        Extract plan details for dimension table
-        """
-        return Plan(planId = self.planDetails["id"], planLength = self.planDetails["planLength"]).to_dict()
+        return [self.summary.to_dict()]
 
     # ########################
     # Transform: dim__workouts
@@ -79,7 +70,16 @@ class Activity(BaseDataClass):
         """
         workout = Workout(workoutId = self.workoutId, metadata = self.plannedWorkoutMetadata)
         workout.transform__summary()
-        return workout.summary.to_dict()
+        return [workout.summary.to_dict()]
+
+    # ########################
+    # Transform: dim__plans
+    # ########################
+    def transform__dim__plans(self):
+        """
+        Extract plan details for dimension table
+        """
+        return [Plan(planId = self.planDetails["id"], planLength = self.planDetails["planLength"]).to_dict()]
 
     # ########################
     # Transform: bdg__activity_to_laps

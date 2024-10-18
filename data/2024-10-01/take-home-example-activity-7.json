@@ -1,12 +1,13 @@
 {
-    "userId": "user-1",
-    "workoutId": 1,
+    "userId": "user-5",
+    "activityId": "activity7",
+    "workoutId": "200m-Repeats",
     "recordType": "GARMIN",
     "laps": [
         {
             "averageCadence": 177,
             "averageHeartRate": 143.5,
-            "averageSpeed": 2.772,
+            "averageSpeed": 1.772,
             "distance": 2000,
             "elevationGain": 9,
             "maxCadence": 190,
@@ -22816,12 +22817,16 @@
         }
     ],
     "createdOn": 1707150113000,
-    "weekOfPlan": 6,
+    "planDetails": {
+        "id": "HILLY_HALF",
+        "planLength": 10
+    },
+    "weekOfPlan": 7,
     "unitOfMeasure": "KILOMETERS",
     "plannedWorkoutMetadata": {
         "workoutType": "RUN",
         "runType": "TEMPO",
-        "distance": 6.2,
+        "distance": 10,
         "currentEst5kTimeInSecs": 1475,
         "plannedWorkoutDate": "2024-02-05",
         "stepsV2": [
@@ -22841,6 +22846,8 @@
                     {
                         "type": "WorkoutStep",
                         "intensity": "ACTIVE",
+                        "durationType": "DISTANCE",
+                        "durationValue": 0.2,
                         "durationValueType": "KILOMETER",
                         "targetType": "PACE",
                         "paces": {

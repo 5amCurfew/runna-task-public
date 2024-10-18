@@ -7,9 +7,6 @@
       + [`bdg__activity_to_laps`](#bdg__activity_to_laps)
       + [`bdg__workout_to_steps`](#bdg__workout_to_steps)
    * [Example Queries](#example-queries)
-   * [Extensions](#extensions)
-   * [File Structure](#file-structure)
-   * [Notes](#notes)
 
 ## Runna Task Home Task, October 2024
 
@@ -27,22 +24,7 @@ Cloud infrastructure for this task is provided in the `infra` directory. This in
 
 The data provided, in addition to replicated JSON files, can be found in the `data` directory, where each subdirectory reflects a **batch date** (this is to mirror a cloud storage system bucket, such as S3, for demonstration purposes).
 
-Mock-batches are processed using the `main.py` file, where all data for the batch is ingested into the warehouse sinks `runna-task-public.activities.raw__<TABLE_TYPE>__<ATOMIC_VALUE>` as a new row with an `extractedAt` field. Activities are processed concurrently for performance (*note a limit of 2 threads in this example*). 
-
-```bash
-python3 main.py 2024-10-01
-
-data/2024-10-01/take-home-example-activity-1-with-error.json extraction at 2024-10-14 18:05:48.513134...
-data/2024-10-01/take-home-example-activity-6.json extraction at 2024-10-14 18:05:48.513401...
-Warning: data/2024-10-01/take-home-example-activity-1-with-error.json: __init__() missing 2 required positional arguments: 'activityId' and 'planDetails'. skipping...
-data/2024-10-01/take-home-example-activity-1.json extraction at 2024-10-14 18:05:48.527748...
-data/2024-10-01/take-home-example-activity-6.json loaded successfully at 2024-10-14 18:05:51.797218
-data/2024-10-01/take-home-example-activity-5.json extraction at 2024-10-14 18:05:51.798645...
-data/2024-10-01/take-home-example-activity-1.json loaded successfully at 2024-10-14 18:05:51.804437
-data/2024-10-01/take-home-example-activity-5.json loaded successfully at 2024-10-14 18:05:53.693522
-```
-
-For the purposes of this task, failures, warnings and errors are logged to the terminal, and ingestion is subsequently skipped. This is done for demonstration purposes, but in a production environment, these would be logged in an audit table within the warehouse, and a separate alerting system would be used to notify the team of any issues (for example, a Slack channel).
+The `pipeline.py` defines an *Apache Beam* pipeline. This is the orchestrator for the ETL process.
 
 ### Data Model (Transformation)
 
@@ -216,99 +198,3 @@ from
   inner join activity_steps
     on activity_steps.activityID = activity_steps_completed.activityID
 ```
-
-### Extensions
-
-* Unit tests for class transformation methods
-* Explicit typing tests for models - however I do not *own the data generating process* and I don't want the pipeline to break if the data changes
-* Currently, the `Activity` class is very strict on the schema, with more time I would like to decouple the `Activity` class from other data models (e.g. load an activity that wasn't part of a plan? issues with `plannedWorkoutMetadata` but still load `laps`?)
-* On failure of a record being loaded, dump the JSON record to an error audit log
-* Alerting mechanism
-* Orchestration - e.g. these can be adapted to be Airflow operators.
-* With more time I would like to provide further aggregated fields on the `fact` table (e.g. `isCompleted`).
-
-### File Structure
-```bash
-runna-task-public/
-┣ data/
-┃ ┣ 2024-10-01/
-┃ ┗ 2024-10-02/
-┣ etl/
-┃ ┣ __init__.py
-┃ ┣ extract.py
-┃ ┗ load.py
-┣ infra/
-┃ ┣ schema/
-┃ ┣ README.md
-┃ ┣ backend.hcl
-┃ ┣ bigquery__presentation.tf
-┃ ┣ bigquery__raw.tf
-┃ ┗ main.tf
-┣ models/
-┃ ┣ Activity.py
-┃ ┣ ActivityLap.py
-┃ ┣ ActivitySummary.py
-┃ ┣ BaseDataClass.py
-┃ ┣ Plan.py
-┃ ┣ Workout.py
-┃ ┣ WorkoutStep.py
-┃ ┣ WorkoutSummary.py
-┃ ┗ __init__.py
-┣ .gitignore
-┣ .python-version
-┣ Makefile
-┣ README.md
-┣ main.py
-┗ requirements.txt
-```
-
-
-### Notes
-
-A PLAN is a collection of scheduled WORKOUTs
-- ID: unique identifier of the plan
-- planLength: the total duration of the plan
-
-An ACTIVITY is a record of performance during a WORKOUT
-- ID: unique identifier of the activity
-- userID: identifier of the user
-- workoutID: unique identifier of the workout
-- weekOfPlan: the week of the plan at the time of the activity
-- ...
-
-A WORKOUT is a collection of STEPS
-- ID: unique identifier of the workout (Is a workout specific to a user x plan?)
-- workoutType: classifier of the workout
-- runType: classifier of the run
-- plannedWorkoutDate: scheduled date of the workout
-- ...
-
-A STEP is an component of a workout (completion reflected in an activity LAP)
-- type: classifier of the step
-- duration: duration of the step
-- ...
-
-fct__activities
-
-* -> dim__workouts
-* -> dim__plans
-* -> bdg__activity_to_laps
-
-dim__plans
-
-* <- fct__activities
-
-dim__workouts
-
-* <- fct__activities
-* -> bdg__workout_to_steps
-
-bdg__activity_to_laps
-
-* <- fct__activities
-* -> bdg__workout_to_steps
-
-bdg__workout_to_steps
-
-* <- dim__workouts
-* <- bdg__activity_to_lap 

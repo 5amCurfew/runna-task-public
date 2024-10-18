@@ -1,6 +1,6 @@
 from google.cloud import bigquery
 
-def load(table_id: str, data: list[dict], sourcePath: str) -> None:
+def load(table_id: str, data: list[dict], sourcePath) -> None:
     """
     Args:
         table_id (str): The full table ID in the format `project.dataset.table`.
@@ -11,8 +11,12 @@ def load(table_id: str, data: list[dict], sourcePath: str) -> None:
         None
     """
     client = bigquery.Client(project="runna-task-public")
+    if not data:
+        print(f"Warning: {sourcePath}:raw__{table_id} failure to load data")
+        return
+    
     try:
-        errors = client.insert_rows_json(table_id, data)
+        errors = client.insert_rows_json(f"runna-task-public.activities.raw__{table_id}", data)
         if errors != []:
             print(f"Warning: {sourcePath}: errors while inserting rows: {errors}")
     except Exception as e:
