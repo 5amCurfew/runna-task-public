@@ -21,6 +21,10 @@ class ExtractFn(beam.DoFn):
             # Yield to the main (success) output
             yield beam.pvalue.TaggedOutput(SUCCESS_TAG, data)
 
+class LoadFn(beam.DoFn):
+    def process(self, record):
+        return
+
 class TransformFn(beam.DoFn):
     def process(self, activity):
         try:
