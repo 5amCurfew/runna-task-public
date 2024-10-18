@@ -112,7 +112,6 @@ if __name__ == "__main__":
     # Define PipelineOptions
     options = PipelineOptions(
         runner='DirectRunner',
-        direct_running_mode='multi_processing',
         direct_num_workers=3,
         save_main_session=True,
         batch_date=args.batch_date
