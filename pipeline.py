@@ -1,6 +1,6 @@
 import apache_beam as beam
 from apache_beam.io.filesystems import FileSystems
-from apache_beam.options.pipeline_options import PipelineOptions, SetupOptions
+from apache_beam.options.pipeline_options import PipelineOptions
 from models import Activity
 import argparse
 import datetime
