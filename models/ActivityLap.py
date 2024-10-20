@@ -1,10 +1,9 @@
 import datetime
 from dataclasses import dataclass
 from typing import Optional
-from .BaseDataClass import BaseDataClass
 
 @dataclass
-class ActivityLap(BaseDataClass):
+class ActivityLap():
     index: int
     averageCadence: Optional[float] = None
     averageHeartRate: Optional[float] = None
@@ -26,5 +25,4 @@ class ActivityLap(BaseDataClass):
         # If startTimestamp is provided, divide it by 1000
         if self.startTimestamp is not None:
             self.startTimestamp /= 1000
-        # Set ETL metadata
         self.extractedAt = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")

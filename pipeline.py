@@ -8,6 +8,8 @@ import etl
 import logging
 from typing import Optional
 
+logging.getLogger().setLevel(logging.INFO)
+
 # ########################
 # Apache Beam Pipeline
 # ########################
@@ -27,9 +29,10 @@ transformations = [
 # ########################
 class ExtractFn(beam.DoFn):
     def process(self, file_path):
+        logging.info(f"extracting {file_path} at {datetime.datetime.now()}...")
         data, error = etl.extract(file_path)
         if error:
-            # Yield to failure side output
+            logging.warning(f"{file_path}: {error} skipping...")
             yield beam.pvalue.TaggedOutput(FAILURE_TAG, (file_path, error))
         else:
             yield beam.pvalue.TaggedOutput(SUCCESS_TAG, data)
@@ -39,28 +42,31 @@ class TransformFn(beam.DoFn):
         try:
             act = Activity(**activity)
         except Exception as e:
-            print(f"{activity['sourcePath']}: {e} skipping...")
+            logging.warning(f"{activity['sourcePath']}: {e} skipping...")
             yield beam.pvalue.TaggedOutput(FAILURE_TAG, (activity['sourcePath'], str(e)))
             return
 
         result = {'sourcePath': act.sourcePath}
         for model in transformations:
             try:
-                result[model] = getattr(act, f"transform__{model}")()
+                result[model] = getattr(act, f"transform__{model}_record")()
             except Exception as e:
-                # If an error occurs, set the result to None
                 result[model] = None
-
+        
         yield beam.pvalue.TaggedOutput(SUCCESS_TAG, result)
 
 class LoadFn(beam.DoFn):
     def process(self, record):
         for model in transformations:
-            try:
-                etl.load(model, record[model], record['sourcePath'])
-            except Exception as e:
+            if not record[model]:
+                logging.warning(f"{record['sourcePath']}:{model}: failed transformation - skipping...")
                 continue
-
+            try:
+                etl.load(model, record[model])
+            except Exception as e:
+                logging.warning(f"{record['sourcePath']}:{model}: {e} - skipping...")
+                continue
+    
         yield f"{record['sourcePath']} loaded at {datetime.datetime.now()}"
 
 
@@ -80,7 +86,11 @@ def execute(pipeline_options: Optional[PipelineOptions] = None):
         directory_pattern = f"data/{batch_date}/*.json"
         activity_paths = FileSystems.match([directory_pattern])[0].metadata_list
         file_paths = [file.path for file in activity_paths]
+        if len(file_paths) == 0:
+            raise ValueError(f"No files found for batch date {batch_date}")
         
+        logging.info(f"files in batch: {', '.join(file_paths)}")
+
         extracted = (
             p
             | 'Find activities for batch' >> beam.Create(file_paths)
@@ -102,7 +112,6 @@ def execute(pipeline_options: Optional[PipelineOptions] = None):
         )
 
         loaded | beam.Map(print)
-        #transformed[FAILURE_TAG] | beam.Map(print)
 
 
 if __name__ == "__main__":

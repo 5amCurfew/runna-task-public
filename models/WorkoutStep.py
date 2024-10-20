@@ -2,10 +2,9 @@ import datetime
 import json
 from dataclasses import dataclass
 from typing import Optional
-from .BaseDataClass import BaseDataClass
 
 @dataclass
-class WorkoutStep(BaseDataClass):
+class WorkoutStep():
     index: int
     durationType: Optional[str] = None
     durationValue: Optional[float] = None
@@ -21,5 +20,4 @@ class WorkoutStep(BaseDataClass):
     def __post_init__(self):
         if self.paces is not None:
             self.paces = json.dumps(self.paces)
-        # Set ETL metadata
         self.extractedAt = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")

@@ -1,4 +1,3 @@
-import datetime
 import json
 
 def extract(path: str) -> tuple[dict, str]:
@@ -14,16 +13,12 @@ def extract(path: str) -> tuple[dict, str]:
         FileNotFoundError: If the file is not found.
         JSONDecodeError: If the file contains invalid JSON data.
     """
-    print(f"{path} extraction at {datetime.datetime.now()}...")
-
     try:
         with open(path, "r") as file:
             data = json.load(file)
             data['sourcePath'] = path
             return data, None
     except FileNotFoundError as e:
-        print(f"Warning: file not found {path} - skipping...")
         return None, str(e)
     except json.JSONDecodeError as e:
-        print(f"Warning: invalid json at {path} - skipping...")
         return None, str(e)

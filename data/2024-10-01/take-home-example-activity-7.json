@@ -22828,76 +22828,7 @@
         "runType": "TEMPO",
         "distance": 10,
         "currentEst5kTimeInSecs": 1475,
-        "plannedWorkoutDate": "2024-02-05",
-        "stepsV2": [
-            {
-                "type": "WorkoutStep",
-                "intensity": "WARMUP",
-                "durationType": "DISTANCE",
-                "durationValue": 2,
-                "durationValueType": "KILOMETER",
-                "targetType": null,
-                "paces": null
-            },
-            {
-                "type": "WorkoutRepeatStep",
-                "repeatValue": 8,
-                "steps": [
-                    {
-                        "type": "WorkoutStep",
-                        "intensity": "ACTIVE",
-                        "durationType": "DISTANCE",
-                        "durationValue": 0.2,
-                        "durationValueType": "KILOMETER",
-                        "targetType": "PACE",
-                        "paces": {
-                            "slow": {
-                                "text": "4:55",
-                                "mps": 3.389830508474576
-                            },
-                            "average": {
-                                "text": "4:45",
-                                "mps": 3.5087719298245617
-                            },
-                            "fast": {
-                                "text": "4:35",
-                                "mps": 3.6363636363636367
-                            }
-                        }
-                    },
-                    {
-                        "type": "WorkoutStep",
-                        "intensity": "ACTIVE",
-                        "durationType": "DISTANCE",
-                        "durationValue": 0.2,
-                        "durationValueType": "KILOMETER",
-                        "targetType": "PACE",
-                        "paces": {
-                            "slow": {
-                                "text": "6:35",
-                                "mps": 2.5316455696202533
-                            },
-                            "average": {
-                                "text": "6:20",
-                                "mps": 2.6315789473684212
-                            },
-                            "fast": {
-                                "text": "6:05",
-                                "mps": 2.7397260273972606
-                            }
-                        }
-                    }
-                ]
-            },
-            {
-                "type": "WorkoutStep",
-                "intensity": "COOLDOWN",
-                "durationType": "DISTANCE",
-                "durationValue": 1,
-                "durationValueType": "KILOMETER",
-                "targetType": null,
-                "paces": null
-            }
-        ]
+        "plannedWorkoutDate": "2024-02-05"
+        
     }
 }
