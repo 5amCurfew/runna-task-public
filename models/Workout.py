@@ -1,10 +1,11 @@
 import datetime
-from .WorkoutRecord import WorkoutRecord
+from models.WorkoutRecord import WorkoutRecord
+from models.util.BaseDataClasses import BaseDataClass
 from dataclasses import dataclass
 from typing import Optional
 
 @dataclass
-class Workout():
+class Workout(BaseDataClass):
     workoutId: int
     metadata: dict
     extractedAt: Optional[str] = None
