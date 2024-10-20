@@ -83,7 +83,7 @@ class Activity(BaseDataClass):
         """
         Transform workout data into a summary for summary dimension table
         """
-        record = Workout(workoutId = self.workoutId, metadata = self.plannedWorkoutMetadata).transform__dim_workouts_record()
+        record = Workout(workoutId = self.workout_id, metadata = self.planned_workout_metadata).transform__dim_workouts_record()
         return [record.__dict__]
 
     # ########################
@@ -93,7 +93,7 @@ class Activity(BaseDataClass):
         """
         Transforms workout steps into a format suitable for for bridge table (workout -> steps)
         """
-        records = Workout(workoutId=self.workoutId, metadata=self.plannedWorkoutMetadata).transform__bdg__workout_to_steps()
+        records = Workout(workoutId=self.workout_id, metadata=self.planned_workout_metadata).transform__bdg__workout_to_steps()
         return [
             {
                 "surrogateKey": f"{self.workoutId}::{index}",
