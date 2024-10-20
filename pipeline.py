@@ -10,9 +10,6 @@ from typing import Optional
 
 logging.getLogger().setLevel(logging.INFO)
 
-# ########################
-# Apache Beam Pipeline
-# ########################
 SUCCESS_TAG = 'SUCCESS'
 FAILURE_TAG = 'FAILURE'
 
