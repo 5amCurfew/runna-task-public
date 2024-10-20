@@ -16,7 +16,9 @@ class WorkoutStep():
     steps: Optional[int] = None
     targetType: Optional[str] = None
     type: Optional[str] = None
-
+    extractedAt: Optional[str] = None
+    surrogateKey: Optional[str] = None
+    
     def __post_init__(self):
         if self.paces is not None:
             self.paces = json.dumps(self.paces)

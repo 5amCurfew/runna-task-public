@@ -1,7 +1,7 @@
 import apache_beam as beam
 from apache_beam.io.filesystems import FileSystems
 from apache_beam.options.pipeline_options import PipelineOptions
-from models import Activity
+from models.Activity import Activity
 import argparse
 import datetime
 import etl
@@ -18,10 +18,10 @@ FAILURE_TAG = 'FAILURE'
 
 transformations = [
     'fct__activities',
-    'dim__plans',
-    'dim__workouts',
-    'bdg__activity_to_laps',
-    'bdg__workout_to_steps'
+    #'dim__plans',
+    #'dim__workouts',
+    #'bdg__activity_to_laps',
+    #'bdg__workout_to_steps'
 ]
 
 # ########################
@@ -40,13 +40,13 @@ class ExtractFn(beam.DoFn):
 class TransformFn(beam.DoFn):
     def process(self, activity):
         try:
-            act = Activity(**activity)
+            act = Activity.from_json(activity)
         except Exception as e:
             logging.warning(f"{activity['sourcePath']}: {e} skipping...")
             yield beam.pvalue.TaggedOutput(FAILURE_TAG, (activity['sourcePath'], str(e)))
             return
 
-        result = {'sourcePath': act.sourcePath}
+        result = {'source_path': act.source_path}
         for model in transformations:
             try:
                 result[model] = getattr(act, f"transform__{model}_record")()
@@ -106,12 +106,14 @@ def execute(pipeline_options: Optional[PipelineOptions] = None):
             )
         )
 
-        loaded = (
-            transformed[SUCCESS_TAG] 
-            | beam.ParDo(LoadFn())
-        )
+        transformed[SUCCESS_TAG] | beam.Map(print)
 
-        loaded | beam.Map(print)
+        #loaded = (
+        #    transformed[SUCCESS_TAG] 
+        #    | beam.ParDo(LoadFn())
+        #)
+
+        #loaded | beam.Map(print)
 
 
 if __name__ == "__main__":

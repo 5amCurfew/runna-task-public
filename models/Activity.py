@@ -1,48 +1,51 @@
 import datetime
-from .ActivityRecord import ActivityRecord
-from .Workout import Workout
-from .WorkoutStep import WorkoutStep
-from .Plan import Plan
-from .ActivityLap import ActivityLap
+from models.ActivityRecord import ActivityRecord
+from models.Workout import Workout
+from models.WorkoutStep import WorkoutStep
+from models.Plan import Plan
+from models.ActivityLap import ActivityLap
 from dataclasses import dataclass
 from typing import Optional
+from models.util.BaseDataClasses import BaseDataClass
 
 @dataclass
-class Activity():
-    activityId: str
+class Activity(BaseDataClass):
+    activity_id: str
     laps: list[dict]
-    planDetails: dict
-    plannedWorkoutMetadata: dict
-    sourcePath: str
-    unitOfMeasure: str
-    userId: str
+    plan_details: dict
+    planned_workout_metadata: dict
+    source_path: str
+    unit_of_measure: str
+    user_id: str
     waypoints: list[dict]
-    workoutId: str
-    createdOn: Optional[int] = None
-    recordType: Optional[str] = None
-    weekOfPlan: Optional[int] = None
+    workout_id: str
+    created_on: Optional[int] = None
+    record_type: Optional[str] = None
+    week_of_plan: Optional[int] = None
+    extract_at: Optional[str] = None
+    surrogate_key: Optional[str] = None
 
     def __post_init__(self):
-        self.extractedAt = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        self.surrogateKey = self.activityId
-        if self.createdOn is None:
-            self.createdOn = min(self.laps, key=lambda x: x["startTimestamp"]).get("startTimestamp")
+        self.extracted_at = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        self.surrogate_key = self.activity_id
+        if self.created_on is None:
+            self.created_on = min(self.laps, key=lambda x: x["startTimestamp"]).get("startTimestamp")
 
     # ########################
     # Transform: fct__activities
     # ########################
     def transform__fct__activities_record(self) -> list[dict]:
         record = ActivityRecord(**{
-                "activityId": self.activityId,
-                "createdOn": self.createdOn,
-                "planId": self.planDetails["id"],
-                "sourcePath": self.sourcePath,
-                "surrogateKey": self.surrogateKey,
-                "userId": self.userId,
-                "workoutId": self.workoutId,
-                "recordType": self.recordType,
-                "weekOfPlan": self.weekOfPlan,
-                "currentEst5kTimeInSecs": self.plannedWorkoutMetadata.get("currentEst5kTimeInSecs", None),
+                "activity_id": self.activity_id,
+                "created_on": self.created_on,
+                "plan_id": self.plan_details["id"],
+                "source_path": self.source_path,
+                "surrogate_key": self.surrogate_key,
+                "user_id": self.user_id,
+                "workout_id": self.workout_id,
+                "record_type": self.record_type,
+                "week_of_plan": self.week_of_plan,
+                "current_est5k_time_in_secs": self.planned_workout_metadata.get("currentEst5kTimeInSecs", None),
         })
         return [record.__dict__]
     
@@ -55,9 +58,9 @@ class Activity():
         """
         return [
             {
-                "surrogateKey": f"{self.activityId}::{index}",
-                "activityID": self.activityId,
-                "workoutStepSurrogateKey": f"{self.workoutId}::{index}",
+                "surrogate_key": f"{self.activity_id}::{index}",
+                "activity_id": self.activity_id,
+                "workout_step_surrogate_key": f"{self.workout_id}::{index}",
                 **ActivityLap(index=index, **lap).__dict__
             }
             for index, lap in enumerate(self.laps)
@@ -70,7 +73,7 @@ class Activity():
         """
         Extract plan details for dimension table
         """
-        record = Plan(planId = self.planDetails["id"], planLength = self.planDetails["planLength"])
+        record = Plan(planId = self.plan_details["id"], planLength = self.plan_details.get("planLength", None))
         return [record.__dict__]
 
     # ########################

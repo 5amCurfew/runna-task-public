@@ -20,7 +20,9 @@ class ActivityLap():
     startTimestamp: Optional[int] = None
     totalTime: Optional[float] = None
     wktStepIndex: Optional[int] = None
-
+    extractedAt: Optional[str] = None
+    surrogateKey: Optional[str] = None
+    
     def __post_init__(self):
         # If startTimestamp is provided, divide it by 1000
         if self.startTimestamp is not None:

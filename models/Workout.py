@@ -1,11 +1,14 @@
 import datetime
 from .WorkoutRecord import WorkoutRecord
 from dataclasses import dataclass
+from typing import Optional
 
 @dataclass
 class Workout():
     workoutId: int
     metadata: dict
+    extractedAt: Optional[str] = None
+    surrogateKey: Optional[str] = None
 
     def transform__dim_workouts_record(self) -> dict:
         return WorkoutRecord(**{
