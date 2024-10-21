@@ -12,10 +12,10 @@ class ActivityRecord():
     user_id: str
     workout_id: str
     created_at: Optional[str] = None
-    record_type: Optional[str] = None
-    week_of_plan: Optional[int] = None
     current_est5k_time_in_secs: Optional[int] = None
     extracted_at: Optional[str] = None
+    record_type: Optional[str] = None
+    week_of_plan: Optional[int] = None
 
     def __post_init__(self):
         """

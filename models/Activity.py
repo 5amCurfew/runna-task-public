@@ -20,10 +20,10 @@ class Activity(BaseDataClass):
     waypoints: list[dict]
     workout_id: str
     created_on: Optional[int] = None
+    extracted_at: str = None
     record_type: Optional[str] = None
+    surrogate_key: str = None
     week_of_plan: Optional[int] = None
-    extract_at: Optional[str] = None
-    surrogate_key: Optional[str] = None
 
     def __post_init__(self):
         self.extracted_at = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -35,18 +35,19 @@ class Activity(BaseDataClass):
     # Transform: fct__activities
     # ########################
     def transform__fct__activities_record(self) -> list[dict]:
-        record = ActivityRecord(**{
-                "activity_id": self.activity_id,
-                "created_on": self.created_on,
-                "plan_id": self.plan_details["id"],
-                "source_path": self.source_path,
-                "surrogate_key": self.surrogate_key,
-                "user_id": self.user_id,
-                "workout_id": self.workout_id,
-                "record_type": self.record_type,
-                "week_of_plan": self.week_of_plan,
-                "current_est5k_time_in_secs": self.planned_workout_metadata.get("currentEst5kTimeInSecs", None),
-        })
+        record = ActivityRecord(
+            activity_id = self.activity_id,
+            created_on = self.created_on,
+            current_est5k_time_in_secs = self.planned_workout_metadata.get("current_est5k_time_in_secs", None),
+            plan_id = self.plan_details["id"],
+            record_type = self.record_type,
+            source_path = self.source_path,
+            surrogate_key = self.surrogate_key,
+            user_id = self.user_id,
+            week_of_plan = self.week_of_plan,
+            workout_id = self.workout_id,
+        )
+
         return [record.__dict__]
     
     # ########################
@@ -58,10 +59,12 @@ class Activity(BaseDataClass):
         """
         return [
             {
-                "surrogate_key": f"{self.activity_id}::{index}",
-                "activity_id": self.activity_id,
                 "workout_step_surrogate_key": f"{self.workout_id}::{index}",
-                **ActivityLap(index=index, **lap).__dict__
+                **ActivityLap(
+                    activity_id = self.activity_id, 
+                    index = index, 
+                    **lap
+                ).__dict__
             }
             for index, lap in enumerate(self.laps)
         ]
@@ -73,7 +76,11 @@ class Activity(BaseDataClass):
         """
         Extract plan details for dimension table
         """
-        record = Plan(planId = self.plan_details["id"], planLength = self.plan_details.get("planLength", None))
+        record = Plan(
+            plan_id = self.plan_details["id"], 
+            plan_length = self.plan_details.get("plan_length", -1)
+        )
+
         return [record.__dict__]
 
     # ########################
@@ -83,7 +90,12 @@ class Activity(BaseDataClass):
         """
         Transform workout data into a summary for summary dimension table
         """
-        record = Workout(workoutId = self.workout_id, metadata = self.planned_workout_metadata).transform__dim_workouts_record()
+        workout = Workout(
+            workout_id = self.workout_id, 
+            metadata = self.planned_workout_metadata
+        )
+        record = workout.transform__dim__workouts_record()
+
         return [record.__dict__]
 
     # ########################
@@ -93,12 +105,19 @@ class Activity(BaseDataClass):
         """
         Transforms workout steps into a format suitable for for bridge table (workout -> steps)
         """
-        records = Workout(workoutId=self.workout_id, metadata=self.planned_workout_metadata).transform__bdg__workout_to_steps()
+        workout = Workout(
+            workout_id = self.workout_id,
+            metadata = self.planned_workout_metadata
+        )
+        records = workout.transform__bdg__workout_to_steps()
+
         return [
             {
-                "surrogateKey": f"{self.workoutId}::{index}",
-                "workoutID": self.workoutId,
-                **WorkoutStep(index=index, **step).__dict__
+                **WorkoutStep(
+                    workout_id = self.workout_id, 
+                    index = index, 
+                    **step
+                ).__dict__
             }
             for index, step in enumerate(records)
         ]

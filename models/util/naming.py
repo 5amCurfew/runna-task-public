@@ -1,12 +1,19 @@
 import re
-from typing import Dict, Any
+from typing import Dict, Any, Union, List
 
-# Utility function to convert camelCase to snake_case
-def camel_to_snake(name: str) -> str:
-    # Convert from camelCase to snake_case
-    s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
-    return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
+def to_snake_case(s: str) -> str:
+    """Helper function to convert camelCase or PascalCase to snake_case."""
+    return re.sub(r'(?<!^)(?=[A-Z])', '_', s).lower()
 
-# Function to convert a JSON dict's keys to snake_case
-def convert_keys_to_snake_case(data: Dict[str, Any]) -> Dict[str, Any]:
-    return {camel_to_snake(k): v for k, v in data.items()}
+def convert_keys_to_snake_case(data: Union[Dict[str, Any], List[Any]]) -> Union[Dict[str, Any], List[Any]]:
+    """Recursively convert all dictionary keys to snake_case."""
+    if isinstance(data, dict):
+        new_data = {}
+        for key, value in data.items():
+            new_key = to_snake_case(key)
+            new_data[new_key] = convert_keys_to_snake_case(value)
+        return new_data
+    elif isinstance(data, list):
+        return [convert_keys_to_snake_case(item) for item in data]
+    else:
+        return data

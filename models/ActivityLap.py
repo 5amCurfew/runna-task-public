@@ -4,27 +4,29 @@ from typing import Optional
 
 @dataclass
 class ActivityLap():
+    activity_id: str
     index: int
-    averageCadence: Optional[float] = None
-    averageHeartRate: Optional[float] = None
-    averageSpeed: Optional[float] = None
+    average_cadence: Optional[float] = None
+    average_heart_rate: Optional[float] = None
+    average_speed: Optional[float] = None
     distance: Optional[float] = None
-    elevationGain: Optional[float] = None
-    maxCadence: Optional[float] = None
-    maxElevation: Optional[float] = None
-    maxHeartRate: Optional[int] = None
-    maxSpeed: Optional[float] = None
-    minElevation: Optional[float] = None
-    minHeartRate: Optional[float] = None
-    movingTime: Optional[float] = None
-    startTimestamp: Optional[int] = None
-    totalTime: Optional[float] = None
-    wktStepIndex: Optional[int] = None
-    extractedAt: Optional[str] = None
-    surrogateKey: Optional[str] = None
+    elevation_gain: Optional[float] = None
+    extracted_at: str = None
+    max_cadence: Optional[float] = None
+    max_elevation: Optional[float] = None
+    max_heart_rate: Optional[int] = None
+    max_speed: Optional[float] = None
+    min_elevation: Optional[float] = None
+    min_heart_rate: Optional[float] = None
+    moving_time: Optional[float] = None
+    start_timestamp: Optional[int] = None
+    surrogate_key: str = None
+    total_time: Optional[float] = None
+    wkt_step_index: Optional[int] = None
     
     def __post_init__(self):
         # If startTimestamp is provided, divide it by 1000
-        if self.startTimestamp is not None:
-            self.startTimestamp /= 1000
-        self.extractedAt = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        if self.start_timestamp is not None:
+            self.start_timestamp /= 1000
+        self.extracted_at = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        self.surrogate_key = f"{self.activity_id}::{self.index}"

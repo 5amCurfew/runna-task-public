@@ -4,11 +4,11 @@ from typing import Optional
 
 @dataclass
 class Plan():
-    planId: str
-    planLength: Optional[int] = None
-    extractedAt: Optional[str] = None
-    surrogateKey: Optional[str] = None
+    plan_id: str
+    extracted_at: str = None
+    plan_length: Optional[int] = None
+    surrogate_key: str = None
     
     def __post_init__(self):
-        self.extractedAt = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        self.surrogateKey = self.planId
+        self.extracted_at = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        self.surrogate_key = self.plan_id
