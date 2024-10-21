@@ -3,8 +3,9 @@ import json
 from dataclasses import dataclass
 from typing import Optional
 
+
 @dataclass
-class WorkoutStep():
+class WorkoutStep:
     workout_id: int
     index: int
     duration_type: Optional[str] = None
@@ -19,7 +20,7 @@ class WorkoutStep():
     surrogate_key: str = None
     target_type: Optional[str] = None
     type: Optional[str] = None
-    
+
     def __post_init__(self):
         if self.paces is not None:
             self.paces = json.dumps(self.paces)

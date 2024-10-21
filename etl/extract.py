@@ -1,5 +1,6 @@
 import json
 
+
 def extract(path: str) -> tuple[dict, str]:
     """
     Extracts activity data from a given JSON file
@@ -7,7 +8,7 @@ def extract(path: str) -> tuple[dict, str]:
     try:
         with open(path, "r") as file:
             data = json.load(file)
-            data['sourcePath'] = path
+            data["sourcePath"] = path
             return data, None
     except FileNotFoundError as e:
         return None, str(f"FileNotFoundError: {e}")

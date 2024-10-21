@@ -2,8 +2,9 @@ import datetime
 from dataclasses import dataclass
 from typing import Optional
 
+
 @dataclass
-class ActivityLap():
+class ActivityLap:
     activity_id: str
     index: int
     average_cadence: Optional[float] = None
@@ -23,7 +24,7 @@ class ActivityLap():
     surrogate_key: str = None
     total_time: Optional[float] = None
     wkt_step_index: Optional[int] = None
-    
+
     def __post_init__(self):
         # If startTimestamp is provided, divide it by 1000
         if self.start_timestamp is not None:

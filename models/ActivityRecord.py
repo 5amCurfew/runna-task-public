@@ -2,8 +2,9 @@ import datetime
 from dataclasses import dataclass
 from typing import Optional
 
+
 @dataclass
-class ActivityRecord():
+class ActivityRecord:
     activity_id: str
     created_on: str
     plan_id: str
@@ -22,5 +23,7 @@ class ActivityRecord():
         Post-initialization hook to perform any necessary transformations.
         """
         self.extracted_at = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        self.created_at = datetime.datetime.fromtimestamp(self.created_on / 1000).strftime("%Y-%m-%d %H:%M:%S")
+        self.created_at = datetime.datetime.fromtimestamp(
+            self.created_on / 1000
+        ).strftime("%Y-%m-%d %H:%M:%S")
         self.surrogate_key = self.activity_id
