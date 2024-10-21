@@ -1,4 +1,3 @@
-__all__ = ["extract", "load"]
+__all__ = ["extract"]
 
 from .extract import extract
-from .load import load

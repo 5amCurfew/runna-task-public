@@ -17,15 +17,13 @@
 
 ### Introduction
 
-Cloud infrastructure for this task is provided in the `infra` directory. This includes creation of data sinks (BigQuery tables) and the presentation views presented for analytics. For more information, see the `README.md` in the `infra` directory. Terraform is used to manage the infrastructure. *Note that GCP & BigQuery was chosen for ease due to my existing personal accounts. The principles can also be applied to AWS & Redshift.*
-
-**Extract** and **Load** functions can be found in the `etl` directory. It is assumed throughout that *daily batches* meets requirements for Runna. `extract` reads from JSON files, and `load` writes to BigQuery. These are executed in the `main.py`.
+**Extract** function can be found in the `etl` directory. It is assumed throughout that *daily batches* meets requirements for Runna. `extract` reads from JSON files.
 
 **Data transformation** is handled by the `Activity` class within the `models` directory. This class is responsible for parsing and storing the data in the appropriate format to then *load* to the data warehouse. This includes transforming *Workout Steps* (bridge table), *Activity Laps* (bridge table) and the fact/dimensional models.
 
 The data provided, in addition to replicated JSON files, can be found in the `data` directory, where each subdirectory reflects a **batch date** (this is to mirror a cloud storage system bucket, such as S3, for demonstration purposes).
 
-The `pipeline.py` defines an *Apache Beam* pipeline. This is the orchestrator for the ETL process.
+The `pipeline.py` defines an [Apache Beam](https://beam.apache.org/). This is the orchestrator for the ETL process.
 
 ### Data Model (Transformation)
 
