@@ -52,7 +52,7 @@ class TransformFn(beam.DoFn):
             try:
                 record[model] = getattr(act, f"transform__{model}_record")()
             except Exception as e:
-                logging.warning(f"{record['source_path']}:{model}: failed transformation - setting to NULL...")
+                logging.warning(f"{record['source_path']}:{model}: failed transformation {e} - setting to NULL...")
                 record[model] = None
         
         logging.info(f"transformed {record['source_path']} at {datetime.datetime.now()}")

@@ -1,8 +1,6 @@
 import datetime
 from models.WorkoutRecord import WorkoutRecord
-from models.util.BaseDataClasses import BaseDataClass
 from dataclasses import dataclass
-from typing import Optional
 
 @dataclass
 class Workout():
