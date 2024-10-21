@@ -1,5 +1,5 @@
 import datetime
-from models.WorkoutRecord import WorkoutRecord
+from models.worktout_record import WorkoutRecord
 from dataclasses import dataclass
 
 

@@ -1,12 +1,12 @@
 import datetime
-from models.ActivityRecord import ActivityRecord
-from models.Workout import Workout
-from models.WorkoutStep import WorkoutStep
-from models.Plan import Plan
-from models.ActivityLap import ActivityLap
+from models.activity_record import ActivityRecord
+from models.workout import Workout
+from models.workout_step import WorkoutStep
+from models.plan import Plan
+from models.activity_lap import ActivityLap
 from dataclasses import dataclass
 from typing import Optional
-from models.util.BaseDataClasses import BaseDataClass
+from models.util.base_data_class import BaseDataClass
 
 
 @dataclass
@@ -30,8 +30,8 @@ class Activity(BaseDataClass):
         self.extracted_at = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         self.surrogate_key = self.activity_id
         if self.created_on is None:
-            self.created_on = min(self.laps, key=lambda x: x["startTimestamp"]).get(
-                "startTimestamp"
+            self.created_on = min(self.laps, key=lambda x: x["start_timestamp"]).get(
+                "start_timestamp"
             )
 
     # ########################
@@ -60,7 +60,7 @@ class Activity(BaseDataClass):
     # ########################
     def transform__bdg__activity_to_laps_record(self) -> list[dict]:
         """
-        Transforms laps data into a format suitable for bridge table (activity -> laps)
+        Transforms laps data into a format suitable for bridge table
         """
         return [
             {
@@ -105,7 +105,7 @@ class Activity(BaseDataClass):
     # ########################
     def transform__bdg__workout_to_steps_record(self) -> list[dict]:
         """
-        Transforms workout steps into a format suitable for for bridge table (workout -> steps)
+        Transforms workout steps into a format suitable for for bridge table
         """
         workout = Workout(
             workout_id=self.workout_id, metadata=self.planned_workout_metadata

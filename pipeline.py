@@ -1,7 +1,7 @@
 import apache_beam as beam
 from apache_beam.io.filesystems import FileSystems
 from apache_beam.options.pipeline_options import PipelineOptions
-from models.Activity import Activity
+from models.activity import Activity
 import argparse
 import datetime
 import etl
@@ -15,9 +15,9 @@ FAILURE_TAG = "FAILURE"
 
 transformations = [
     "fct__activities",
-    'dim__plans',
-    'dim__workouts',
-    'bdg__activity_to_laps',
+    "dim__plans",
+    "dim__workouts",
+    "bdg__activity_to_laps",
     "bdg__workout_to_steps",
 ]
 
@@ -59,7 +59,7 @@ class TransformFn(beam.DoFn):
                 record[model] = getattr(act, f"transform__{model}_record")()
             except Exception as e:
                 logging.warning(
-                    f"{record['source_path']}:{model}: failed transformation {e} - setting to NULL..."
+                    f"{record['source_path']}:{model}: failed transform {e}"
                 )
                 record[model] = None
 
