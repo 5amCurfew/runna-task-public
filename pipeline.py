@@ -109,7 +109,8 @@ def execute(pipeline_options: Optional[PipelineOptions] = None):
         extracted = (
             p
             | "Find activities for batch" >> beam.Create(file_paths)
-            | "Extract" >> beam.ParDo(ExtractFn()).with_outputs(SUCCESS_TAG, FAILURE_TAG)
+            | "Extract"
+            >> beam.ParDo(ExtractFn()).with_outputs(SUCCESS_TAG, FAILURE_TAG)
         )
 
         transformed = extracted[SUCCESS_TAG] | "Transform" >> beam.ParDo(
