@@ -23,7 +23,7 @@
 
 The data provided, in addition to replicated JSON files, can be found in the `data` directory, where each subdirectory reflects a **batch date** (this is to mirror a cloud storage system bucket, such as S3, for demonstration purposes).
 
-The `pipeline.py` defines an [Apache Beam](https://beam.apache.org/). This is the orchestrator for the ETL process.
+The `pipeline.py` defines an [Apache Beam](https://beam.apache.org/) pipeline. This is the orchestrator for the ETL process.
 
 ### Data Model (Transformation)
 
