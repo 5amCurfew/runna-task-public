@@ -25,10 +25,15 @@ class Activity(BaseDataClass):
     record_type: Optional[str] = None
     surrogate_key: str = None
     week_of_plan: Optional[int] = None
+    _workout: Workout = None
 
     def __post_init__(self):
         self.extracted_at = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         self.surrogate_key = self.activity_id
+        self._workout = Workout(
+            workout_id=self.workout_id, metadata=self.planned_workout_metadata
+        )
+
         if self.created_on is None:
             self.created_on = min(self.laps, key=lambda x: x["start_timestamp"]).get(
                 "start_timestamp"
@@ -93,10 +98,7 @@ class Activity(BaseDataClass):
         """
         Transform workout data into a summary for summary dimension table
         """
-        workout = Workout(
-            workout_id=self.workout_id, metadata=self.planned_workout_metadata
-        )
-        record = workout.transform__dim__workouts_record()
+        record = self._workout.transform__dim__workouts_record()
 
         return [record.__dict__]
 
@@ -107,10 +109,7 @@ class Activity(BaseDataClass):
         """
         Transforms workout steps into a format suitable for for bridge table
         """
-        workout = Workout(
-            workout_id=self.workout_id, metadata=self.planned_workout_metadata
-        )
-        records = workout.transform__bdg__workout_to_steps()
+        records = self._workout.transform__bdg__workout_to_steps()
 
         return [
             {**WorkoutStep(workout_id=self.workout_id, index=index, **step).__dict__}

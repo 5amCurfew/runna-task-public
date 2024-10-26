@@ -5,6 +5,7 @@ from models.activity import Activity
 import argparse
 import datetime
 import etl
+import json
 import logging
 from typing import Optional
 
@@ -14,10 +15,10 @@ SUCCESS_TAG = "SUCCESS"
 FAILURE_TAG = "FAILURE"
 
 transformations = [
-    "fct__activities",
-    "dim__plans",
+    #"fct__activities",
+    #"dim__plans",
     "dim__workouts",
-    "bdg__activity_to_laps",
+    #"bdg__activity_to_laps",
     "bdg__workout_to_steps",
 ]
 
@@ -117,7 +118,7 @@ def execute(pipeline_options: Optional[PipelineOptions] = None):
             TransformFn()
         ).with_outputs(SUCCESS_TAG, FAILURE_TAG)
 
-        transformed[SUCCESS_TAG]
+        transformed[SUCCESS_TAG] | "Print" >> beam.Map(lambda record: print(json.dumps(record, indent=4)))
 
 
 if __name__ == "__main__":
