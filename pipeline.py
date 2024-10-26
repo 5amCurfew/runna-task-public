@@ -3,22 +3,26 @@ from apache_beam.io.filesystems import FileSystems
 from apache_beam.options.pipeline_options import PipelineOptions
 from models.activity import Activity
 import argparse
-import datetime
 import etl
-import json
 import logging
 from typing import Optional
 
-logging.getLogger().setLevel(logging.INFO)
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S"
+)
+logging.getLogger(__name__)
+
 
 SUCCESS_TAG = "SUCCESS"
 FAILURE_TAG = "FAILURE"
 
 transformations = [
-    #"fct__activities",
-    #"dim__plans",
+    "fct__activities",
+    "dim__plans",
     "dim__workouts",
-    #"bdg__activity_to_laps",
+    "bdg__activity_to_laps",
     "bdg__workout_to_steps",
 ]
 
@@ -28,21 +32,21 @@ transformations = [
 # ########################
 class ExtractFn(beam.DoFn):
     def process(self, file_path):
-        logging.info(f"extracting {file_path} at {datetime.datetime.now()}...")
+        logging.info(f"extracting {file_path}")
 
         activity, error = etl.extract(file_path)
         if error:
             logging.warning(f"{file_path}: {error} skipping...")
             yield beam.pvalue.TaggedOutput(FAILURE_TAG, (file_path, error))
         else:
-            logging.info(f"extracted {file_path} at {datetime.datetime.now()}")
+            logging.info(f"extracted {file_path}")
             yield beam.pvalue.TaggedOutput(SUCCESS_TAG, activity)
 
 
 class TransformFn(beam.DoFn):
     def process(self, activity):
         logging.info(
-            f"transforming {activity['sourcePath']} at {datetime.datetime.now()}"
+            f"transforming {activity['sourcePath']}"
         )
 
         try:
@@ -60,12 +64,12 @@ class TransformFn(beam.DoFn):
                 record[model] = getattr(act, f"transform__{model}_record")()
             except Exception as e:
                 logging.warning(
-                    f"{record['source_path']}:{model}: failed transform {e}"
+                    f"{record['source_path']}:{model}: failed transform {e} skipping..."
                 )
                 record[model] = None
 
         logging.info(
-            f"transformed {record['source_path']} at {datetime.datetime.now()}"
+            f"transformed {record['source_path']}"
         )
         yield beam.pvalue.TaggedOutput(SUCCESS_TAG, record)
 
@@ -77,7 +81,7 @@ class LoadFn(beam.DoFn):
                 continue
             try:
                 etl.load(model, record[model])
-                yield f"{record['sourcePath']} loaded at {datetime.datetime.now()}"
+                yield f"{record['sourcePath']} loaded"
             except Exception as e:
                 logging.warning(f"{record['sourcePath']}:{model}: {e} - skipping...")
                 continue
@@ -118,7 +122,7 @@ def execute(pipeline_options: Optional[PipelineOptions] = None):
             TransformFn()
         ).with_outputs(SUCCESS_TAG, FAILURE_TAG)
 
-        transformed[SUCCESS_TAG] | "Print" >> beam.Map(lambda record: print(json.dumps(record, indent=4)))
+        transformed[SUCCESS_TAG] #| "Print" >> beam.Map(lambda record: print(json.dumps(record, indent=4)))
 
 
 if __name__ == "__main__":
