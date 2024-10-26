@@ -1,90 +1,17 @@
-import apache_beam as beam
 from apache_beam.io.filesystems import FileSystems
 from apache_beam.options.pipeline_options import PipelineOptions
-from models.activity import Activity
+from typing import Optional
+import apache_beam as beam
 import argparse
 import etl
 import logging
-from typing import Optional
 
 logging.basicConfig(
     level=logging.INFO,
-    format="%(asctime)s - %(levelname)s - %(message)s",
-    datefmt="%Y-%m-%d %H:%M:%S"
+    format="%(asctime)s.%(msecs)03d - %(levelname)s - %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
 )
 logging.getLogger(__name__)
-
-
-SUCCESS_TAG = "SUCCESS"
-FAILURE_TAG = "FAILURE"
-
-transformations = [
-    "fct__activities",
-    "dim__plans",
-    "dim__workouts",
-    "bdg__activity_to_laps",
-    "bdg__workout_to_steps",
-]
-
-
-# ########################
-# ETL Fns
-# ########################
-class ExtractFn(beam.DoFn):
-    def process(self, file_path):
-        logging.info(f"extracting {file_path}")
-
-        activity, error = etl.extract(file_path)
-        if error:
-            logging.warning(f"{file_path}: {error} skipping...")
-            yield beam.pvalue.TaggedOutput(FAILURE_TAG, (file_path, error))
-        else:
-            logging.info(f"extracted {file_path}")
-            yield beam.pvalue.TaggedOutput(SUCCESS_TAG, activity)
-
-
-class TransformFn(beam.DoFn):
-    def process(self, activity):
-        logging.info(
-            f"transforming {activity['sourcePath']}"
-        )
-
-        try:
-            act = Activity.from_json(activity)
-        except Exception as e:
-            logging.warning(f"{activity['sourcePath']}: {e} skipping...")
-            yield beam.pvalue.TaggedOutput(
-                FAILURE_TAG, (activity["sourcePath"], str(e))
-            )
-            return
-
-        record = {"source_path": act.source_path}
-        for model in transformations:
-            try:
-                record[model] = getattr(act, f"transform__{model}_record")()
-            except Exception as e:
-                logging.warning(
-                    f"{record['source_path']}:{model}: failed transform {e} skipping..."
-                )
-                record[model] = None
-
-        logging.info(
-            f"transformed {record['source_path']}"
-        )
-        yield beam.pvalue.TaggedOutput(SUCCESS_TAG, record)
-
-
-class LoadFn(beam.DoFn):
-    def process(self, record):
-        for model in transformations:
-            if not record[model]:
-                continue
-            try:
-                etl.load(model, record[model])
-                yield f"{record['sourcePath']} loaded"
-            except Exception as e:
-                logging.warning(f"{record['sourcePath']}:{model}: {e} - skipping...")
-                continue
 
 
 # ########################
@@ -115,14 +42,18 @@ def execute(pipeline_options: Optional[PipelineOptions] = None):
             p
             | "Find activities for batch" >> beam.Create(file_paths)
             | "Extract"
-            >> beam.ParDo(ExtractFn()).with_outputs(SUCCESS_TAG, FAILURE_TAG)
+            >> beam.ParDo(etl.extract.ExtractFn()).with_outputs(
+                etl.util.SUCCESS_TAG, etl.util.FAILURE_TAG
+            )
         )
 
-        transformed = extracted[SUCCESS_TAG] | "Transform" >> beam.ParDo(
-            TransformFn()
-        ).with_outputs(SUCCESS_TAG, FAILURE_TAG)
+        transformed = extracted[etl.util.SUCCESS_TAG] | "Transform" >> beam.ParDo(
+            etl.transform.TransformFn()
+        ).with_outputs(etl.util.SUCCESS_TAG, etl.util.FAILURE_TAG)
 
-        transformed[SUCCESS_TAG] #| "Print" >> beam.Map(lambda record: print(json.dumps(record, indent=4)))
+        transformed[
+            etl.util.SUCCESS_TAG
+        ]  # | "Print" >> beam.Map(lambda record: print(json.dumps(record, indent=4)))
 
 
 if __name__ == "__main__":

@@ -17,9 +17,9 @@
 
 ### Introduction
 
-**Extract** function can be found in the `etl` directory. It is assumed throughout that *daily batches* meets requirements for Runna. `extract` reads from JSON files.
+The `etl` package contains [ParDo](https://beam.apache.org/documentation/transforms/python/elementwise/pardo/) functions used to extract, transform and load data in the [Apache Beam](https://beam.apache.org/) pipeline. It is assumed throughout that *daily batches* meets requirements for Runna.
 
-**Data transformation** is handled by the `Activity` class within the `models` directory. This class is responsible for parsing and storing the data in the appropriate format to then *load* to the data warehouse. This includes transforming *Workout Steps* (bridge table), *Activity Laps* (bridge table) and the fact/dimensional models.
+Data transformation is handled by the `Activity` class within the `models` package (this is called in the `TransformFn`). This class is responsible for parsing and storing the data in the appropriate format to then *load* to the data warehouse. This includes transforming *Workout Steps* (bridge table), *Activity Laps* (bridge table) and the fact/dimensional models.
 
 The data provided, in addition to replicated JSON files, can be found in the `data` directory, where each subdirectory reflects a **batch date** (this is to mirror a cloud storage system bucket, such as S3, for demonstration purposes).
 
@@ -86,32 +86,29 @@ A bridge table, mapping a workout (one) to steps (many). Step metadata is stored
 `python3 pipeline.py --batch_date 2024-10-01`
 
 ```bash
-2024-10-26 10:42:54 - INFO - Creating state cache with size 104857600
-2024-10-26 10:42:54 - INFO - Creating state cache with size 104857600
-2024-10-26 10:42:54 - INFO - Creating state cache with size 104857600
-2024-10-26 10:42:54 - INFO - extracting data/2024-10-01/take-home-example-activity-6.json
-2024-10-26 10:42:54 - INFO - extracting data/2024-10-01/take-home-example-activity-1.json
-2024-10-26 10:42:54 - INFO - extracting data/2024-10-01/error-not-json.json
-2024-10-26 10:42:54 - WARNING - data/2024-10-01/error-not-json.json: JSONDecodeError: Expecting value: line 1 column 1 (char 0) skipping...
-2024-10-26 10:42:54 - INFO - extracting data/2024-10-01/take-home-example-activity-5.json
-2024-10-26 10:42:54 - INFO - extracted data/2024-10-01/take-home-example-activity-6.json
-2024-10-26 10:42:54 - INFO - transforming data/2024-10-01/take-home-example-activity-6.json
-2024-10-26 10:42:54 - INFO - extracted data/2024-10-01/take-home-example-activity-5.json
-2024-10-26 10:42:54 - INFO - transforming data/2024-10-01/take-home-example-activity-5.json
-2024-10-26 10:42:54 - INFO - transformed data/2024-10-01/take-home-example-activity-6.json
-2024-10-26 10:42:54 - INFO - extracting data/2024-10-01/take-home-example-activity-7-with-no-steps.json
-2024-10-26 10:42:54 - INFO - extracted data/2024-10-01/take-home-example-activity-1.json
-2024-10-26 10:42:54 - INFO - transforming data/2024-10-01/take-home-example-activity-1.json
-2024-10-26 10:42:54 - INFO - transformed data/2024-10-01/take-home-example-activity-5.json
-2024-10-26 10:42:54 - INFO - extracted data/2024-10-01/take-home-example-activity-7-with-no-steps.json
-2024-10-26 10:42:54 - INFO - transforming data/2024-10-01/take-home-example-activity-7-with-no-steps.json
-2024-10-26 10:42:54 - WARNING - data/2024-10-01/take-home-example-activity-7-with-no-steps.json:bdg__workout_to_steps: failed transform 'steps_v2' skipping...
-2024-10-26 10:42:54 - INFO - transformed data/2024-10-01/take-home-example-activity-7-with-no-steps.json
-2024-10-26 10:42:54 - INFO - transformed data/2024-10-01/take-home-example-activity-1.json
-2024-10-26 10:42:54 - INFO - extracting data/2024-10-01/take-home-example-activity-1-with-no-activity-id.json
-2024-10-26 10:42:54 - INFO - extracted data/2024-10-01/take-home-example-activity-1-with-no-activity-id.json
-2024-10-26 10:42:54 - INFO - transforming data/2024-10-01/take-home-example-activity-1-with-no-activity-id.json
-2024-10-26 10:42:54 - WARNING - data/2024-10-01/take-home-example-activity-1-with-no-activity-id.json: __init__() missing 2 required positional arguments: 'activity_id' and 'plan_details' skipping...
+2024-10-26 12:12:07.308 - INFO - extracting data/2024-10-01/error-not-json.json
+2024-10-26 12:12:07.311 - INFO - extracting data/2024-10-01/take-home-example-activity-6.json
+2024-10-26 12:12:07.311 - WARNING - data/2024-10-01/error-not-json.json: JSONDecodeError: Expecting value: line 1 column 1 (char 0): data/2024-10-01/error-not-json.json skipping...
+2024-10-26 12:12:07.311 - INFO - extracting data/2024-10-01/take-home-example-activity-5.json
+2024-10-26 12:12:07.315 - INFO - extracting data/2024-10-01/take-home-example-activity-1.json
+2024-10-26 12:12:07.321 - INFO - extracted data/2024-10-01/take-home-example-activity-6.json
+2024-10-26 12:12:07.322 - INFO - transforming data/2024-10-01/take-home-example-activity-6.json
+2024-10-26 12:12:07.338 - INFO - extracted data/2024-10-01/take-home-example-activity-1.json
+2024-10-26 12:12:07.340 - INFO - transforming data/2024-10-01/take-home-example-activity-1.json
+2024-10-26 12:12:07.359 - INFO - extracted data/2024-10-01/take-home-example-activity-5.json
+2024-10-26 12:12:07.361 - INFO - transforming data/2024-10-01/take-home-example-activity-5.json
+2024-10-26 12:12:07.393 - INFO - transformed data/2024-10-01/take-home-example-activity-6.json
+2024-10-26 12:12:07.394 - INFO - extracting data/2024-10-01/take-home-example-activity-7-with-no-steps.json
+2024-10-26 12:12:07.423 - INFO - transformed data/2024-10-01/take-home-example-activity-1.json
+2024-10-26 12:12:07.424 - INFO - extracting data/2024-10-01/take-home-example-activity-1-with-no-activity-id.json
+2024-10-26 12:12:07.429 - INFO - extracted data/2024-10-01/take-home-example-activity-7-with-no-steps.json
+2024-10-26 12:12:07.431 - INFO - transforming data/2024-10-01/take-home-example-activity-7-with-no-steps.json
+2024-10-26 12:12:07.451 - INFO - transformed data/2024-10-01/take-home-example-activity-5.json
+2024-10-26 12:12:07.469 - INFO - extracted data/2024-10-01/take-home-example-activity-1-with-no-activity-id.json
+2024-10-26 12:12:07.471 - INFO - transforming data/2024-10-01/take-home-example-activity-1-with-no-activity-id.json
+2024-10-26 12:12:07.500 - WARNING - data/2024-10-01/take-home-example-activity-7-with-no-steps.json:bdg__workout_to_steps: failed transform 'steps_v2' skipping...
+2024-10-26 12:12:07.500 - INFO - transformed data/2024-10-01/take-home-example-activity-7-with-no-steps.json
+2024-10-26 12:12:07.511 - WARNING - data/2024-10-01/take-home-example-activity-1-with-no-activity-id.json: __init__() missing 2 required positional arguments: 'activity_id' and 'plan_details' skipping...
 ```
 
 

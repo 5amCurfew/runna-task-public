@@ -1,5 +1,4 @@
 import datetime
-from models.worktout_record import WorkoutRecord
 from dataclasses import dataclass
 
 
@@ -9,14 +8,6 @@ class Workout:
     metadata: dict
     extracted_at: str = None
     surrogate_key: str = None
-
-    def transform__dim__workouts_record(self) -> dict:
-        return WorkoutRecord(
-            workout_id=self.workout_id,
-            workout_type=self.metadata.get("workout_type", None),
-            run_type=self.metadata.get("run_type", None),
-            distance=self.metadata.get("distance", None),
-        )
 
     def transform__bdg__workout_to_steps(self):
         flattened_workout_steps = []

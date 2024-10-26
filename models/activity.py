@@ -1,12 +1,13 @@
-import datetime
-from models.activity_record import ActivityRecord
-from models.workout import Workout
-from models.workout_step import WorkoutStep
-from models.plan import Plan
-from models.activity_lap import ActivityLap
 from dataclasses import dataclass
-from typing import Optional
+from models.activity_lap import ActivityLap
+from models.activity_record import ActivityRecord
+from models.plan import Plan
 from models.util.base_data_class import BaseDataClass
+from models.workout import Workout
+from models.workout_record import WorkoutRecord
+from models.workout_step import WorkoutStep
+from typing import Optional
+import datetime
 
 
 @dataclass
@@ -98,7 +99,12 @@ class Activity(BaseDataClass):
         """
         Transform workout data into a summary for summary dimension table
         """
-        record = self._workout.transform__dim__workouts_record()
+        record = WorkoutRecord(
+            workout_id=self._workout.workout_id,
+            workout_type=self._workout.metadata.get("workout_type", None),
+            run_type=self._workout.metadata.get("run_type", None),
+            distance=self._workout.metadata.get("distance", None),
+        )
 
         return [record.__dict__]
 
