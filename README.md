@@ -9,7 +9,7 @@
    * [Example Output](#example-output)
    * [Example Queries](#example-queries)
 
-## Runna Task Home Task, October 2024
+## Runna Take Home Task, October 2024
 
 *We currently have ~30,000 activities landing in s3 per day. The representations of these activities are JSON files with data pertaining to activity performance, plan adherence (e.g. which week of their plan they are on) and user data (e.g. their current estimated 5k time).*
 
