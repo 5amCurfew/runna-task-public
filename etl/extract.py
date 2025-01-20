@@ -1,3 +1,4 @@
+from models.activity import Activity
 import apache_beam as beam
 import etl.util as util
 import json
@@ -13,8 +14,16 @@ class ExtractFn(beam.DoFn):
             logging.warning(f"{file_path}: {error} skipping...")
             yield beam.pvalue.TaggedOutput(util.FAILURE_TAG, (file_path, error))
         else:
-            logging.info(f"extracted {file_path}")
-            yield beam.pvalue.TaggedOutput(util.SUCCESS_TAG, activity)
+            try:
+                act = Activity.from_json(activity)
+                logging.info(f"extracted {file_path}")
+                yield beam.pvalue.TaggedOutput(util.SUCCESS_TAG, act)
+            except Exception as e:
+                logging.warning(f"{activity['sourcePath']}: {e} skipping...")
+                yield beam.pvalue.TaggedOutput(
+                    util.FAILURE_TAG, (activity["sourcePath"], str(e))
+                )
+                return
 
 
 def extract(path: str) -> tuple[dict, str]:

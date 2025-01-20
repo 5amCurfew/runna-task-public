@@ -1,7 +1,7 @@
 SUCCESS_TAG = "SUCCESS"
 FAILURE_TAG = "FAILURE"
 
-transformations = [
+models = [
     "fct__activities",
     "dim__plans",
     "dim__workouts",
