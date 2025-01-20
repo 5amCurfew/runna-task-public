@@ -86,21 +86,40 @@ A bridge table, mapping a workout (one) to steps (many). Step metadata is stored
 `python3 pipeline.py --batch_date 2024-10-01`
 
 ```bash
-2025-01-20 15:13:40.512 - INFO - extracting data/2024-10-01/take-home-example-activity-6.json
-2025-01-20 15:13:40.539 - INFO - extracting data/2024-10-01/take-home-example-activity-1.json
-2025-01-20 15:13:40.539 - INFO - extracting data/2024-10-01/not-json.json
-2025-01-20 15:13:40.564 - INFO - extracted data/2024-10-01/take-home-example-activity-6.json
-2025-01-20 15:13:40.566 - INFO - transforming data/2024-10-01/take-home-example-activity-6.json
-2025-01-20 15:13:40.568 - INFO - extracting data/2024-10-01/take-home-example-activity-1-with-no-activity-id.json
-2025-01-20 15:13:40.568 - WARNING - data/2024-10-01/not-json.json: JSONDecodeError: Expecting value: line 1 column 1 (char 0): data/2024-10-01/not-json.json skipping...
-2025-01-20 15:13:40.568 - INFO - extracting data/2024-10-01/take-home-example-activity-7-with-no-steps.json
-2025-01-20 15:13:40.631 - INFO - extracted data/2024-10-01/take-home-example-activity-1.json
-2025-01-20 15:13:40.633 - INFO - transforming data/2024-10-01/take-home-example-activity-1.json
-2025-01-20 15:13:40.634 - INFO - extracting data/2024-10-01/take-home-example-activity-5.json
-2025-01-20 15:13:40.696 - WARNING - data/2024-10-01/take-home-example-activity-1-with-no-activity-id.json: __init__() missing 2 required positional arguments: 'activity_id' and 'plan_details' skipping...
-2025-01-20 15:13:40.713 - INFO - extracted data/2024-10-01/take-home-example-activity-7-with-no-steps.json
-2025-01-20 15:13:40.716 - INFO - transforming data/2024-10-01/take-home-example-activity-7-with-no-steps.json
-2025-01-20 15:13:40.716 - WARNING - data/2024-10-01/take-home-example-activity-7-with-no-steps.json:bdg__workout_to_steps: failed transform 'steps_v2' skipping...
-2025-01-20 15:13:40.735 - INFO - extracted data/2024-10-01/take-home-example-activity-5.json
-2025-01-20 15:13:40.737 - INFO - transforming data/2024-10-01/take-home-example-activity-5.json
+2025-01-20 15:55:06.228 - INFO - extracting data/2024-10-01/take-home-example-activity-6.json
+2025-01-20 15:55:06.262 - INFO - extracting data/2024-10-01/not-json.json
+2025-01-20 15:55:06.270 - INFO - extracting data/2024-10-01/take-home-example-activity-1.json
+2025-01-20 15:55:06.270 - WARNING - data/2024-10-01/not-json.json: JSONDecodeError: Expecting value: line 1 column 1 (char 0): data/2024-10-01/not-json.json skipping...
+2025-01-20 15:55:06.271 - INFO - extracting data/2024-10-01/take-home-example-activity-7-with-no-steps.json
+2025-01-20 15:55:06.279 - INFO - extracted data/2024-10-01/take-home-example-activity-6.json
+2025-01-20 15:55:06.282 - INFO - transforming data/2024-10-01/take-home-example-activity-6.json
+2025-01-20 15:55:06.282 - INFO - data/2024-10-01/take-home-example-activity-6.json:fct__activities successfully loaded
+2025-01-20 15:55:06.282 - INFO - data/2024-10-01/take-home-example-activity-6.json:dim__plans successfully loaded
+2025-01-20 15:55:06.288 - INFO - data/2024-10-01/take-home-example-activity-6.json:dim__workouts successfully loaded
+2025-01-20 15:55:06.288 - INFO - data/2024-10-01/take-home-example-activity-6.json:bdg__activity_to_laps successfully loaded
+2025-01-20 15:55:06.288 - INFO - data/2024-10-01/take-home-example-activity-6.json:bdg__workout_to_steps successfully loaded
+2025-01-20 15:55:06.289 - INFO - extracting data/2024-10-01/take-home-example-activity-1-with-no-activity-id.json
+2025-01-20 15:55:06.386 - INFO - extracted data/2024-10-01/take-home-example-activity-7-with-no-steps.json
+2025-01-20 15:55:06.388 - INFO - transforming data/2024-10-01/take-home-example-activity-7-with-no-steps.json
+2025-01-20 15:55:06.389 - WARNING - data/2024-10-01/take-home-example-activity-7-with-no-steps.json:bdg__workout_to_steps: failed transform 'steps_v2' skipping...
+2025-01-20 15:55:06.389 - INFO - data/2024-10-01/take-home-example-activity-7-with-no-steps.json:fct__activities successfully loaded
+2025-01-20 15:55:06.389 - INFO - data/2024-10-01/take-home-example-activity-7-with-no-steps.json:dim__plans successfully loaded
+2025-01-20 15:55:06.389 - INFO - data/2024-10-01/take-home-example-activity-7-with-no-steps.json:dim__workouts successfully loaded
+2025-01-20 15:55:06.397 - INFO - data/2024-10-01/take-home-example-activity-7-with-no-steps.json:bdg__activity_to_laps successfully loaded
+2025-01-20 15:55:06.397 - INFO - extracted data/2024-10-01/take-home-example-activity-1.json
+2025-01-20 15:55:06.400 - INFO - transforming data/2024-10-01/take-home-example-activity-1.json
+2025-01-20 15:55:06.401 - INFO - data/2024-10-01/take-home-example-activity-1.json:fct__activities successfully loaded
+2025-01-20 15:55:06.401 - INFO - data/2024-10-01/take-home-example-activity-1.json:dim__plans successfully loaded
+2025-01-20 15:55:06.402 - INFO - data/2024-10-01/take-home-example-activity-1.json:dim__workouts successfully loaded
+2025-01-20 15:55:06.402 - INFO - data/2024-10-01/take-home-example-activity-1.json:bdg__activity_to_laps successfully loaded
+2025-01-20 15:55:06.402 - INFO - data/2024-10-01/take-home-example-activity-1.json:bdg__workout_to_steps successfully loaded
+2025-01-20 15:55:06.403 - INFO - extracting data/2024-10-01/take-home-example-activity-5.json
+2025-01-20 15:55:06.402 - WARNING - data/2024-10-01/take-home-example-activity-1-with-no-activity-id.json: failed extract __init__() missing 2 required positional arguments: 'activity_id' and 'plan_details' skipping...
+2025-01-20 15:55:06.442 - INFO - extracted data/2024-10-01/take-home-example-activity-5.json
+2025-01-20 15:55:06.444 - INFO - transforming data/2024-10-01/take-home-example-activity-5.json
+2025-01-20 15:55:06.445 - INFO - data/2024-10-01/take-home-example-activity-5.json:fct__activities successfully loaded
+2025-01-20 15:55:06.445 - INFO - data/2024-10-01/take-home-example-activity-5.json:dim__plans successfully loaded
+2025-01-20 15:55:06.447 - INFO - data/2024-10-01/take-home-example-activity-5.json:dim__workouts successfully loaded
+2025-01-20 15:55:06.447 - INFO - data/2024-10-01/take-home-example-activity-5.json:bdg__activity_to_laps successfully loaded
+2025-01-20 15:55:06.447 - INFO - data/2024-10-01/take-home-example-activity-5.json:bdg__workout_to_steps successfully loaded
 ```

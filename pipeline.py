@@ -51,9 +51,7 @@ def execute(pipeline_options: Optional[PipelineOptions] = None):
             etl.transform.TransformFn()
         ).with_outputs(etl.util.SUCCESS_TAG, etl.util.FAILURE_TAG)
 
-        transformed[
-            etl.util.SUCCESS_TAG
-        ]  # | "Print" >> beam.Map(lambda record: print(json.dumps(record, indent=4)))
+        transformed[etl.util.SUCCESS_TAG] | "Load" >> beam.ParDo(etl.load.LoadFn())
 
 
 if __name__ == "__main__":

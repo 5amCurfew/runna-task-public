@@ -19,11 +19,12 @@ class ExtractFn(beam.DoFn):
                 logging.info(f"extracted {file_path}")
                 yield beam.pvalue.TaggedOutput(util.SUCCESS_TAG, act)
             except Exception as e:
-                logging.warning(f"{activity['sourcePath']}: {e} skipping...")
+                logging.warning(
+                    f"{activity['sourcePath']}: failed extract {e} skipping..."
+                )
                 yield beam.pvalue.TaggedOutput(
                     util.FAILURE_TAG, (activity["sourcePath"], str(e))
                 )
-                return
 
 
 def extract(path: str) -> tuple[dict, str]:
